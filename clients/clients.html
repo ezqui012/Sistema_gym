@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <link rel="stylesheet" href="/css/list.css">
+    <title>Document</title>
+</head>
+<body>
+    <div id="sidebar_component"></div>
+    <div class="frame_list_container">
+        <h3>LISTA DE CLIENTES</h3>
+        <div class="list_container">
+            <div class="list_actions">
+                <div class="searchbar_container">
+                    <input type="text" class="searchbar_field" placeholder="Buscar....">
+                    <button class="search_button"><img src="/assets/icons/lupa.svg" alt=""></button>
+                </div>
+                <button class="add_client">Añadir Cliente</button>
+            </div>
+            <div class="list">
+                <table>
+                    <tr class="header_row">
+                        <th  class="head_data">Nombre</th>
+                        <th class="head_data">Apellido</th>
+                        <th class="head_data">Fecha Inicio</th>
+                        <th class="head_data">Expira</th>
+                        <th class="head_data">CI</th>
+                        <th class="head_data">Membresìa</th>
+                        <th class="head_data">Acciòn</th>
+                    </tr>
+                    <tr>
+                        <td class="data_table">Carlos</td>
+                        <td class="data_table">Benavides</td>
+                        <td class="data_table">11/05/2025</td>
+                        <td class="data_table">11/06/2025</td>
+                        <td class="data_table">80134589</td>
+                        <td class="data_table">Gold</td>
+                        <td class="data_table">d</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="clientList.js"></script>
+</body>
+</html>
