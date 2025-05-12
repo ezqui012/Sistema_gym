@@ -1,6 +1,8 @@
 body{
     background-color: #333339;
     margin: 0;
+    display: flex;
+    flex-direction: row;
 }
 .sidebar_title{
     color: #FF2C2C;
