@@ -1,17 +1,19 @@
 import { sidebar } from "../components/sidebar.js";
 
-document.addEventListener("DOMContentLoaded",()=>{
-    let sidebarComponent=document.getElementById('sidebar_component');
+let sidebarComponent=document.getElementById('sidebar_component');
+
+
+addEventListener("DOMContentLoaded",(e)=>{
     if(sidebarComponent){
         sidebarComponent.innerHTML=sidebar();
     }
-   
     setTimeout(() => {
         const botones = sidebarComponent.querySelectorAll('.btn');
         botones.forEach(btn => {
             const ruta = btn.dataset.route;
-            console.log(ruta)
+           // console.log(ruta)
             if (ruta) {
+                if(ruta)
                 btn.addEventListener('click', () => {
                     window.location.href = ruta;
                 });
@@ -19,12 +21,13 @@ document.addEventListener("DOMContentLoaded",()=>{
         });
     }, 0);
 })
+//const {location: { pathname = '/' }}=window;
 
+console.log(history.pushState(3,'Estes','employee/employeeList'))
 
-let btnAddclient=document.querySelector(".add_client");
-
-btnAddclient.addEventListener("click",()=>{
-    window.location.href="registClient.html";
-});
-
-
+// let loadComponent=(elementContainer,component)=>{
+//     if(elementContainer){
+//         elementContainer.innerHTML=component;        
+//     }
+//     return elementContainer;
+// }
