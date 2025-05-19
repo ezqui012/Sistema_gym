@@ -1,33 +1,15 @@
-import { sidebar } from "../components/sidebar.js";
+import {loadComponent} from "../app/app.js";
 
-let sidebarComponent=document.getElementById('sidebar_component');
+export function initEmployeeList(){
+    
+    let btnAddEmp= document.querySelector('.add_employee');
 
-
-addEventListener("DOMContentLoaded",(e)=>{
-    if(sidebarComponent){
-        sidebarComponent.innerHTML=sidebar();
-    }
-    setTimeout(() => {
-        const botones = sidebarComponent.querySelectorAll('.btn');
-        botones.forEach(btn => {
-            const ruta = btn.dataset.route;
-           // console.log(ruta)
-            if (ruta) {
-                if(ruta)
-                btn.addEventListener('click', () => {
-                    window.location.href = ruta;
-                });
-            }
+    
+        btnAddEmp.addEventListener("click", ()=>{
+            window.history.pushState({},"","/registEmployee");
+            loadComponent();
         });
-    }, 0);
-})
-//const {location: { pathname = '/' }}=window;
+    
 
-console.log(history.pushState(3,'Estes','employee/employeeList'))
 
-// let loadComponent=(elementContainer,component)=>{
-//     if(elementContainer){
-//         elementContainer.innerHTML=component;        
-//     }
-//     return elementContainer;
-// }
+}
