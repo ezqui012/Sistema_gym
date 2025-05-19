@@ -64,7 +64,7 @@ img{
     height: 10px;
     
 }
-.add_client{
+.add_client, .add_employee{
     color: #fff;
     background-color: #12122099 ;
     border: none;
