@@ -1,4 +1,4 @@
-import {loadComponent} from "../app/app.js";
+import {loadComponent} from "../../app/app.js";
 
 export function initEmployeeList(){
     

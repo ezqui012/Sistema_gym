@@ -14,48 +14,48 @@
       <div class="input_data_container">
         <div class="input_container">
           <label  class="field_name">Nombre</label>
-          <input type="text" class="field_data" />
+          <input type="text" class="field_data name" id="name" />
         </div>
         <div class="input_container">
           <label class="field_name">Fecha Inicio</label>
-          <input type="date" class="field_data" />
+          <input type="date" class="field_data initData" id="initDate" />
         </div>
         <div class="input_container">
           <label class="field_name">Apellido</label>
-          <input type="text" class="field_data"/>
+          <input type="text" class="field_data lastName" id="lastName"/>
         </div>
         <div class="input_container">
           <label class="field_name"> Tipo de membresia</label>
-          <select class="field_data" name="" id="">
-            <option value="" class="mebresia1">Silver</option>
-            <option value="" class="mebresia2">Gold</option>
-            <option value="" class="mebresia3">Premium</option>
+          <select class="field_data membership" name="" id="membership">
+            <option value="mem1" class="mebresia1">Silver</option>
+            <option value="mem2" class="mebresia2">Gold</option>
+            <option value="mem3" class="mebresia3">Premium</option>
           </select>
           
         </div>
         <div class="input_container">
           <label class="field_name">Teléfono</label>
-          <input type="text" class="field_data" />
+          <input type="text" class="field_data phone" id="phone" />
         </div>
-        <div class="input_container">
+        <div class="input_container"> 
           <label class="field_name">Foto de Perfil</label>
-          <input type="text" class="field_data" />
+          <input type="text" class="field_data photo" id="photo"/>
         </div>
         <div class="input_container">
           <label class="field_name">CI</label>
-          <input type="text" class="field_data" />
+          <input type="text" class="field_data ci" id="ci" />
         </div>
         <div class="input_container">
           <label class="field_name">NIT</label>
-          <input type="Text" class="field_data" />
+          <input type="Text" class="field_data nit" id="nit" />
         </div>
       </div>
       <div class="button_container">
         <button class="btn_form btn_cancel">Cancelar</button>
-        <button class="btn_form btn_submit">Añadir</button>
+        <button id="submit" class="btn_form btn_submit">Añadir</button>
       </div>
     </form>
 
-    <script type="module" src="register.js"></script>
+    <script type="module" src="../../controllers/clients/register.js"></script>
   </body>
 </html>
