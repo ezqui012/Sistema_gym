@@ -20,10 +20,10 @@ addEventListener("DOMContentLoaded", () => {
 const routes = {
   404: "pages/404",
   "/app": "/app/app.html",
-  "/registEmployee": "/employee/registEmployee.html",
-  "/registClient": "/clients/registClient.html",
-  "/employeeList": "/employee/employeeList.html",
-  "/clientList": "/clients/clientList.html",
+  "/registEmployee": "../views/employee/registEmployee.html",
+  "/registClient": "../views/clients/registClient.html",
+  "/employeeList": "../views/employee/employeeList.html",
+  "/clientList": "../views/clients/clientList.html",
   "/report": "/reports/report1.html",
 };
 
@@ -60,15 +60,15 @@ let renderComponent = (componentContainer, newComponent) => {
 function initView(path) {
   switch (path) {
     case "/clientList":
-      import("/clients/clientList.js").then((mod) => mod.initClientList()).catch((err)=>console.log(err));
+      import("/controllers/clients/clientList.js").then((mod) => mod.initClientList()).catch((err)=>console.log(err));
       break;
     case "/registClient":
-      import("/clients/register.js").then((mod) => mod.initRegisterClient());
+      import("/controllers/clients/register.js").then((mod) => mod.initRegisterClient());
       break;
     case "/employeeList":
-      import("/employee/employeeList.js").then((mod) => mod.initEmployeeList());
+      import("/controllers/employee/employeeList.js").then((mod) => mod.initEmployeeList());
       break;
-    case "/registEmployee":
+    case "/controllers/employee/registEmployee":
       import("/employee/registEmployee.js").then((mod) => mod.initRegisterEmployee());
       break;
     case "/report":

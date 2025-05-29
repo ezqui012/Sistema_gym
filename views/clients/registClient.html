@@ -9,47 +9,65 @@
     <title>Document</title>
   </head>
   <body>
-    <form id="form_data" class="form">
+    <form id="form_data" class="form"  enctype="multipart/form-data">
       <h2>REGISTRAR CLIENTE</h2>
       <div class="input_data_container">
+        <!---Name Group -->
         <div class="input_container">
-          <label  class="field_name">Nombre</label>
-          <input type="text" class="field_data name" id="name" />
+          <label for="name" class="field_name">Nombre</label>
+          <input type="text" class="field_data name" onkeypress="return ' áéíóúabcdefghijklmnñopqrstuvwxyz'.includes(event.key)" id="name" />
+          <p class="error" id="name_error"></p>
+          
         </div>
+        <!---InitDate Group -->
         <div class="input_container">
           <label class="field_name">Fecha Inicio</label>
           <input type="date" class="field_data initData" id="initDate" />
+          <p class="error" id="initDate_error">El nombre debe tener mas de 4 y menos de 18 palabras</p>
         </div>
+        <!---LastName Group -->
         <div class="input_container">
           <label class="field_name">Apellido</label>
-          <input type="text" class="field_data lastName" id="lastName"/>
+          <input type="text" class="field_data lastName" onkeypress="return ' áéíóúabcdefghijklmnñopqrstuvwxyz'.includes(event.key)" id="lastName"/>
+          <p class="error" id="lastName_error"></p>
         </div>
+        <!---Membership Group -->
         <div class="input_container">
           <label class="field_name"> Tipo de membresia</label>
           <select class="field_data membership" name="" id="membership">
+            <option value="mem0" class="mebresia0">Elegir Mebresía</option>
             <option value="mem1" class="mebresia1">Silver</option>
             <option value="mem2" class="mebresia2">Gold</option>
             <option value="mem3" class="mebresia3">Premium</option>
           </select>
-          
+          <p class="error" id="membership_error"></p>
         </div>
+        <!---Phone Group -->
         <div class="input_container">
           <label class="field_name">Teléfono</label>
-          <input type="text" class="field_data phone" id="phone" />
+          <input type="text" class="field_data phone" onkeypress="return '0123456789'.includes(event.key)" id="phone" />
+          <p class="error" id="phone_error"></p>
         </div>
+        <!---Photo Group -->
         <div class="input_container"> 
           <label class="field_name">Foto de Perfil</label>
-          <input type="text" class="field_data photo" id="photo"/>
+          <input type="file" class="field_data photo" id="photo" accept="image/*"/>
+          <p class="error" id="photo_error"></p>
         </div>
+        <!---Ci Group -->
         <div class="input_container">
           <label class="field_name">CI</label>
-          <input type="text" class="field_data ci" id="ci" />
+          <input type="text" class="field_data ci" onkeypress="return '0123456789'.includes(event.key)" id="ci" />
+          <p class="error" id="ci_error">El nombre debe tener mas de 4 y menos de 18 palabras</p>
         </div>
+        <!---Nit Group -->
         <div class="input_container">
           <label class="field_name">NIT</label>
-          <input type="Text" class="field_data nit" id="nit" />
+          <input type="Text" class="field_data nit" onkeypress="return '0123456789'.includes(event.key)" id="nit" />
+          <p class="error" id="nit_error">El nombre debe tener mas de 4 y menos de 18 palabras</p>
         </div>
       </div>
+      <!---button Group -->
       <div class="button_container">
         <button class="btn_form btn_cancel">Cancelar</button>
         <button id="submit" class="btn_form btn_submit">Añadir</button>
@@ -57,5 +75,6 @@
     </form>
 
     <script type="module" src="../../controllers/clients/register.js"></script>
+   
   </body>
 </html>
