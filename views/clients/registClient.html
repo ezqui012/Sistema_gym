@@ -15,20 +15,20 @@
         <!---Name Group -->
         <div class="input_container">
           <label for="name" class="field_name">Nombre</label>
-          <input type="text" class="field_data name" onkeypress="return ' áéíóúabcdefghijklmnñopqrstuvwxyz'.includes(event.key)" id="name" />
+          <input type="text" class="field_data name" onkeypress="return ' ÁÉÍÓÚABCDEFGHIJKLMNÑOPQRSTUVWXYZáéíóúabcdefghijklmnñopqrstuvwxyz'.includes(event.key)" id="name" />
           <p class="error" id="name_error"></p>
           
         </div>
         <!---InitDate Group -->
         <div class="input_container">
-          <label class="field_name">Fecha Inicio</label>
-          <input type="date" class="field_data initData" id="initDate" />
-          <p class="error" id="initDate_error">El nombre debe tener mas de 4 y menos de 18 palabras</p>
+          <label class="field_name">Correo</label>
+          <input type="text" class="field_data email" id="email" />
+          <p class="error" id="email_error"></p>
         </div>
         <!---LastName Group -->
         <div class="input_container">
           <label class="field_name">Apellido</label>
-          <input type="text" class="field_data lastName" onkeypress="return ' áéíóúabcdefghijklmnñopqrstuvwxyz'.includes(event.key)" id="lastName"/>
+          <input type="text" class="field_data lastName" onkeypress="return ' ÁÉÍÓÚABCDEFGHIJKLMNÑOPQRSTUVWXYZáéíóúabcdefghijklmnñopqrstuvwxyz'.includes(event.key)" id="lastName"/>
           <p class="error" id="lastName_error"></p>
         </div>
         <!---Membership Group -->
