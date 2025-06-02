@@ -2,11 +2,7 @@ import { Client } from "../../models/Client.js";
 export function initRegisterClient() {
   const btnSubmit = document.getElementById("submit");
   const allInput= document.querySelectorAll('.field_data');
-  const dateInput = document.getElementById("initDate");
-  dateInput.min = new Date().toISOString().split("T")[0];
   
-  
-
   btnSubmit.addEventListener("click", (e) => {
     e.preventDefault();
     
@@ -29,9 +25,9 @@ export function initRegisterClient() {
       let ci = document.getElementById("ci").value;
       let nit = document.getElementById("nit").value;
       let photo = document.getElementById("photo").value;
-      let initDate = document.getElementById("initDate").value;
+      let email = document.getElementById("email").value;
       let memberShip = document.getElementById("membership").value;
-      let newClient = new Client(idClient, name, lastname, phone, ci, nit, photo, initDate, 0, memberShip);
+      let newClient = new Client(idClient, name, lastname, phone, ci, nit, photo, email, 0, memberShip);
       let usersList= JSON.parse(localStorage.getItem("usersList")) || [];
       usersList.push(newClient);
       localStorage.setItem("usersList", JSON.stringify(usersList));
@@ -181,8 +177,9 @@ export function initRegisterClient() {
         isValid=false;
       }
     }
-    if (id === "initDate") {
-      if (clearField) {
+    if (id === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (clearField && emailRegex.test(clearField)) {
         field.classList.add("valid");
         field.classList.remove("error");
         inputError.classList.remove("show");
@@ -191,13 +188,14 @@ export function initRegisterClient() {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
-        inputError.textContent = "Debe ingresar una fecha";
+        inputError.textContent = "Debe ingresar un correo vàlido";
         isValid=false;
       } else {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
-         isValid=false;
+        inputError.textContent = "Debe ingresar un correo vàlido";
+        isValid=false;
       }
     }
      return isValid;
