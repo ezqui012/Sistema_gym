@@ -21,19 +21,19 @@
         </div>
         <!---InitDate Group -->
         <div class="input_container">
-          <label class="field_name">Correo</label>
+          <label for="email" class="field_name">Correo</label>
           <input type="text" class="field_data email" id="email" />
           <p class="error" id="email_error"></p>
         </div>
         <!---LastName Group -->
         <div class="input_container">
-          <label class="field_name">Apellido</label>
+          <label for="lastName" class="field_name">Apellido</label>
           <input type="text" class="field_data lastName" onkeypress="return ' ÁÉÍÓÚABCDEFGHIJKLMNÑOPQRSTUVWXYZáéíóúabcdefghijklmnñopqrstuvwxyz'.includes(event.key)" id="lastName"/>
           <p class="error" id="lastName_error"></p>
         </div>
         <!---Membership Group -->
         <div class="input_container">
-          <label class="field_name"> Tipo de membresia</label>
+          <label for="membership" class="field_name"> Tipo de membresia</label>
           <select class="field_data membership" name="" id="membership">
             <option value="mem0" class="mebresia0">Elegir Mebresía</option>
             <option value="mem1" class="mebresia1">Silver</option>
@@ -44,25 +44,25 @@
         </div>
         <!---Phone Group -->
         <div class="input_container">
-          <label class="field_name">Teléfono</label>
+          <label for="phone" class="field_name">Teléfono</label>
           <input type="text" class="field_data phone" onkeypress="return '0123456789'.includes(event.key)" id="phone" />
           <p class="error" id="phone_error"></p>
         </div>
         <!---Photo Group -->
         <div class="input_container"> 
-          <label class="field_name">Foto de Perfil</label>
+          <label id="photo" class="field_name">Foto de Perfil</label>
           <input type="file" class="field_data photo" id="photo" accept="image/*"/>
           <p class="error" id="photo_error"></p>
         </div>
         <!---Ci Group -->
         <div class="input_container">
-          <label class="field_name">CI</label>
+          <label for="ci" class="field_name">CI</label>
           <input type="text" class="field_data ci" onkeypress="return '0123456789'.includes(event.key)" id="ci" />
           <p class="error" id="ci_error">El nombre debe tener mas de 4 y menos de 18 palabras</p>
         </div>
         <!---Nit Group -->
         <div class="input_container">
-          <label class="field_name">NIT</label>
+          <label for="nit" class="field_name">NIT</label>
           <input type="Text" class="field_data nit" onkeypress="return '0123456789'.includes(event.key)" id="nit" />
           <p class="error" id="nit_error">El nombre debe tener mas de 4 y menos de 18 palabras</p>
         </div>

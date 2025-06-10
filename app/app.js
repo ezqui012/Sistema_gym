@@ -1,5 +1,6 @@
 import { sidebar } from "../components/sidebar.js";
 
+
 let sidebarComponent = document.getElementById("sidebar_component");
 
 addEventListener("DOMContentLoaded", () => {
@@ -28,8 +29,6 @@ const routes = {
 };
 
 const loadComponent = async () => {
-
-  
   const path = window.location.pathname;
   const newRoute = routes[path] || routes["/app"] || routes["/404"];
   const html = await fetch(newRoute).then((data) => data.text());
@@ -63,16 +62,16 @@ function initView(path) {
       import("/controllers/clients/clientList.js").then((mod) => mod.initClientList()).catch((err)=>console.log(err));
       break;
     case "/registClient":
-      import("/controllers/clients/register.js").then((mod) => mod.initRegisterClient());
+      import("/controllers/clients/register.js").then((mod) => mod.initRegisterClient()).catch((err)=>console.log(err));
       break;
     case "/employeeList":
-      import("/controllers/employee/employeeList.js").then((mod) => mod.initEmployeeList());
+      import("/controllers/employee/employeeList.js").then((mod) => mod.initEmployeeList()).catch((err)=>console.log(err));
       break;
     case "/controllers/employee/registEmployee":
-      import("/employee/registEmployee.js").then((mod) => mod.initRegisterEmployee());
+      import("/employee/registEmployee.js").then((mod) => mod.initRegisterEmployee()).catch((err)=>console.log(err));
       break;
     case "/report":
-      import("../reports/report1.js").then((mod) => mod.initReport());
+      import("../reports/report1.js").then((mod) => mod.initReport()).catch((err)=>console.log(err));
       break;
   }
 
