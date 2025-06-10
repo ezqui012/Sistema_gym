@@ -1,6 +1,6 @@
 export class Client {
 
-    constructor (id, name, lastName, phone, ci, nit, photo, initDate, endDate, membership){
+    constructor (id, name, lastName, phone, ci, nit, photo, email, initDate, endDate, membership){
         this.id=id;
         this.name=name;
         this.lastName=lastName;
@@ -8,6 +8,7 @@ export class Client {
         this.ci=ci;
         this.nit=nit;
         this.photo=photo
+        this.email=email
         this.initDate=initDate;
         this.endDate=endDate;
         this.membership=membership;
@@ -26,6 +27,9 @@ export class Client {
     }
     getNit(){
         return this.nit;
+    }
+    getEmail(){
+        return this.email;
     }
     getInitDate(){
         return this.initDate;
@@ -51,6 +55,9 @@ export class Client {
     }
     setNit(value){
         this.nit=value;
+    }
+    setEmail(value){
+        this.email=value;
     }
     setInitDate(value){
          this.initDate=value;
