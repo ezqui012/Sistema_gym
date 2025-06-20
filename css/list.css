@@ -101,3 +101,47 @@ img{
 .data-row{
     color: #FF6F61;
 }
+
+.btn_action{
+    width: 40px;
+    padding: 3px;
+    border: none;
+    border-radius: 3px;
+}
+.btn_action.view_data{
+    background-color: #47e;
+}
+.btn_action.edit_data{
+    background-color: #90EE90;
+}
+.btn_action.delete_data{
+    background-color: #FF0000;
+}
+
+.btn_action.view_data:hover{
+    background-color: #49e;
+}
+.btn_action.edit_data:hover{
+    background-color: #90EE9999;
+}
+.btn_action.delete_data:hover{
+    background-color: #FF0000aa;
+}
+.actions{
+    display: flex;
+    flex-direction: row;
+    column-gap: 2px;
+    justify-content: center;
+    align-items: center;
+}
+.actions i {  
+  margin: 0 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  color: #fff;
+}
+
+.actions i:hover {
+  transform: scale(1.2);
+  color: #2C2C2C;
+}
