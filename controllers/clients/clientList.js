@@ -1,10 +1,9 @@
 import { loadComponent } from "../../app/app.js";
 export function initClientList() {
   let btnAddclient = document.querySelector(".add_client");
-
+    
 
   btnAddclient.addEventListener("click", () => {
-    console.log("cliceado");
     window.history.pushState({}, "", "/registClient");
     loadComponent();
   });
@@ -34,7 +33,10 @@ export function initClientList() {
 
   let displayClients=()=>{
     let users=JSON.parse(localStorage.getItem('usersList'));
-    let tableContainer=document.querySelector('.table_container');
+    let tbodyContainer=document.querySelector('.tbody_container');
+   
+    tbodyContainer.innerHTML="";
+
     for (let i = 0; i < users.length; i++) {
       let trContainer=document.createElement('tr');
       trContainer.classList.add('data-row');
@@ -74,14 +76,46 @@ export function initClientList() {
       trContainer.appendChild(tdEmail);
 
       let tdAction=document.createElement('td');
-      tdAction.classList.add("data-table");
-      tdAction.textContent="botones <br>";
+      tdAction.classList.add("actions");
+      tdAction.innerHTML=displayButtonOption(users[i].id);
       trContainer.appendChild(tdAction);
-      tableContainer.appendChild(trContainer);
+      tbodyContainer.appendChild(trContainer);
+    }
+    const deleteClient=document.querySelectorAll('.delete_data');  
+    deleteClient.forEach((btn)=>{
+        btn.addEventListener("click", (e)=> {
+          let id=e.currentTarget.dataset.index;
+          deleteData(id);
+        })
+    });
+  }
+  
+  
+  
+  let displayButtonOption=(id)=>{
+    let buttons=`<button class='btn_action view_data' data-index='${id}'><i class="fas fa-eye ver-btn" title="Ver"></i></button>
+                 <button class='btn_action edit_data' data-index='${id}'><i class="fas fa-pen editar-btn" title="Editar"></i></button>
+                 <button class='btn_action delete_data' data-index='${id}' ><i class="fas fa-trash borrar-btn" title="Borrar"></i></button>`
+    return buttons;
+  }
+
+  displayClients();
+
+
+
+   
+  let deleteData=(id)=>{
+    
+    if(id!==null){
+      let usersLocal=JSON.parse(localStorage.getItem("usersList")) || [];
+      let users=usersLocal.filter(user=>user.id!==parseInt(id));
+      localStorage.setItem("usersList", JSON.stringify(users));
+      displayClients();
+    }else{
+      console.log("error con la posicion del elemento" + pos);
     }
     
   }
-  displayClients();
   
   
 }
