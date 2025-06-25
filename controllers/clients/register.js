@@ -1,23 +1,51 @@
 import { Client } from "../../models/Client.js";
 export function initRegisterClient() {
-  const btnSubmit = document.getElementById("submit");
-  const allInput= document.querySelectorAll('.field_data');
+  const btnSubmit = document.getElementById("submits");
   
-  btnSubmit.addEventListener("click", (e) => {
+  const btnSubmitModal= document.getElementById('modal_submit');
+  const btnCloseModal= document.getElementById('close_modal');
+  const allInput= document.querySelectorAll('.field_data');
+  btnSubmitModal.replaceWith(btnSubmitModal.cloneNode(true));
+  const newBtnSubmitModal = document.getElementById('modal_submit');
+
+  btnCloseModal.addEventListener("click", (e)=>{
     e.preventDefault();
-    
+    const alertDialog= document.getElementById('alert-dialog');
+    alertDialog.close();
+  })
 
+  btnSubmit.addEventListener("click",(e)=>{
+    e.preventDefault();
+    const alertDialog= document.getElementById('alert-dialog');
+    console.log("llega");
     let checkForm=true;
-
-    allInput.forEach((oneInput)=>{
+    let checks=[];
+    allInput.forEach((oneInput,i)=>{
         
         const isValid=validateField(oneInput,oneInput.id);
         if(!isValid){
-          checkForm = false;
-        }
+          checks.push(false);
+        }else checks.push(true);
     });
-    console.log(checkForm)
+    checkForm=checks.every(check=>check===true);
     if(checkForm){
+      alertDialog.dataset.checkForm=checkForm;
+      alertDialog.show();
+    }
+  })
+
+
+  newBtnSubmitModal.addEventListener("click", (e) => {
+    e.preventDefault();
+    submitData();
+  });
+
+
+  function submitData(){
+    const alertDialog= document.getElementById('alert-dialog');
+    let checkForm=alertDialog.dataset.checkForm;
+    if(checkForm){
+      btnSubmitModal.disabled=true; 
       let idClient = Date.now();
       let name = document.getElementById("name").value;
       let lastname = document.getElementById("lastName").value;
@@ -32,11 +60,11 @@ export function initRegisterClient() {
       usersList.push(newClient);
       localStorage.setItem("usersList", JSON.stringify(usersList));
       console.log("Usuario registrado con exito");
+      
+      alertDialog.close();
+
     }else console.log("Formulario invalido")
-
-  });
-
-
+  }
 
   const validateField = (field, id) => {
     let isValid=false;
