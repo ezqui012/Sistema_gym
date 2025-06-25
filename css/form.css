@@ -91,3 +91,43 @@ p.error.show{
 }
 
 
+/*alert-dialog */
+.dialog-container{
+    position: absolute;
+    top: 35%; 
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    
+}
+#alert-dialog{
+    justify-content: center;
+    background-color: #333339;
+    color: #E53935;
+    height: 100px;
+    width: 200px;
+}
+#alert-dialog h3{
+    text-align: center;
+}
+
+.button_container_modal{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: space-between;
+    column-gap: 10px;   
+}
+.btn_submit_modal{
+    width: 70px;
+    border: none;
+    padding: 5px;
+    border-radius: 4px;
+}
+.btn_submit_modal.cancel{
+    color: #FF2C2C;
+    background-color: #1E1E1E;
+}
+.btn_submit_modal.confirm{
+    color: #E53935;
+} 
