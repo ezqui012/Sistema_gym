@@ -1,12 +1,34 @@
 import { Client } from "../../models/Client.js";
 export function initRegisterClient() {
-  const btnSubmit = document.getElementById("submits");
-  
+  const btnSubmit = document.getElementById("submits");  
   const btnSubmitModal= document.getElementById('modal_submit');
   const btnCloseModal= document.getElementById('close_modal');
   const allInput= document.querySelectorAll('.field_data');
   btnSubmitModal.replaceWith(btnSubmitModal.cloneNode(true));
   const newBtnSubmitModal = document.getElementById('modal_submit');
+
+  const toastContainer=document.querySelector('.toast_container');
+
+  const showToast=(checkform)=>{
+    let message='';
+    let option='';
+    if(checkform){
+      message='Se registro al usuario con éxito!!';
+      option='sucess';
+    }else{
+      message='Hubo un error al registrar, intenta de nuevo';
+      option='error';
+    }
+    let toastNotification=`<div class="toast ${option}">
+                           <p class="toast_message">${message}</p>
+                           </div>`
+    return toastNotification;
+  }
+
+  
+  const removeToast=()=>{
+    toastContainer.removeChild(toastContainer.firstChild);
+  }
 
   btnCloseModal.addEventListener("click", (e)=>{
     e.preventDefault();
@@ -44,8 +66,7 @@ export function initRegisterClient() {
   function submitData(){
     const alertDialog= document.getElementById('alert-dialog');
     let checkForm=alertDialog.dataset.checkForm;
-    if(checkForm){
-      btnSubmitModal.disabled=true; 
+    if(checkForm){ 
       let idClient = Date.now();
       let name = document.getElementById("name").value;
       let lastname = document.getElementById("lastName").value;
@@ -60,10 +81,18 @@ export function initRegisterClient() {
       usersList.push(newClient);
       localStorage.setItem("usersList", JSON.stringify(usersList));
       console.log("Usuario registrado con exito");
-      
       alertDialog.close();
-
-    }else console.log("Formulario invalido")
+      const toastNotification=showToast(checkForm);
+      toastContainer.innerHTML=toastNotification;
+      setTimeout(() => {
+        removeToast();        
+      }, 3000);
+    }else {
+      const toastNotification=showToast(checkForm);
+       toastContainer.innerHTML=toastNotification;
+      console.log(showToast(checkForm))
+    };
+    toastContainer.addEventListener("click",()=>removeToast());
   }
 
   const validateField = (field, id) => {
