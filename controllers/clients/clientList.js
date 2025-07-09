@@ -1,34 +1,17 @@
 import { loadComponent } from "../../app/app.js";
 export function initClientList() {
-  let btnAddclient = document.querySelector(".add_client");
-    
-
-  btnAddclient.addEventListener("click", () => {
-    window.history.pushState({}, "", "/registClient");
-    loadComponent();
-  });
+  const btnAddclient = document.querySelector(".add_client");
+  const containerBtn=document.querySelector('.btn_numbers');
+  const searchBar=document.getElementById('searchbar');
+  const btnForward=document.querySelector('.forward_btn');
+  const btnBack=document.querySelector('.back_btn');
   
-  let searchBar=document.getElementById('searchbar');
 
-  searchBar.addEventListener('keyup',()=>{
-    let mainTrContainer=document.querySelectorAll('.data-row');
-    const keyword=searchBar.value.toLowerCase().trim();
-   
-    for (let i = 0; i < mainTrContainer.length; i++) {
-      const tdList=mainTrContainer[i].getElementsByTagName('td');
-      let wordIsFound=false;
-      for (let j = 0; j < tdList.length; j++) {
-        let wordToCompare=tdList[j].textContent.toLowerCase().trim();
-        if(wordToCompare.includes(keyword)){
-          wordIsFound=true;
-          break;
-        }
-      }
-      mainTrContainer[i].style.display=wordIsFound ? '': 'none';
-    }
-
-  });
-
+  let since=0;
+  let limit=10;
+  let activePage=1;
+  let users=JSON.parse(localStorage.getItem("usersList"));
+  let pageNumber=users.length/limit;
 
 
   let displayClients=()=>{
@@ -37,13 +20,13 @@ export function initClientList() {
    
     tbodyContainer.innerHTML="";
 
-    for (let i = 0; i < users.length; i++) {
+    for (let i = since; i < limit; i++) {
       let trContainer=document.createElement('tr');
       trContainer.classList.add('data-row');
       let tdName=document.createElement('td');
       tdName.classList.add("data-table");
       tdName.textContent=users[i].name;
-      trContainer.appendChild(tdName);
+      trContainer.append(tdName);
 
       let tdLastName=document.createElement('td');
       tdLastName.classList.add("data-table");
@@ -88,10 +71,10 @@ export function initClientList() {
           deleteData(id);
         })
     });
+    loadButtonPage();
+    prueba();
   }
-  
-  
-  
+
   let displayButtonOption=(id)=>{
     let buttons=`<button class='btn_action view_data' data-index='${id}'><i class="fas fa-eye ver-btn" title="Ver"></i></button>
                  <button class='btn_action edit_data' data-index='${id}'><i class="fas fa-pen editar-btn" title="Editar"></i></button>
@@ -101,9 +84,6 @@ export function initClientList() {
 
   displayClients();
 
-
-
-   
   let deleteData=(id)=>{
     
     if(id!==null){
@@ -116,6 +96,112 @@ export function initClientList() {
     }
     
   }
+
+
+  //Display page buttons
+  function loadButtonPage(){
+    containerBtn.innerHTML="";
+    for (let i = 0; i < pageNumber; i++) {
+      let buttonChange=document.createElement('button');
+      buttonChange.classList.add('btn_page');
+      buttonChange.setAttribute('id', i+1);
+      buttonChange.innerHTML=i+1;
+      containerBtn.append(buttonChange);
+    }
+  }
+  function changePageBack(){
+    if(activePage>1){
+      limit=since;
+      since=since-10;
+      activePage--;
+      users.slice(since,limit);
+      displayClients();
+      
+    }
+  }
+  function changePageForward(){
+    if(activePage<pageNumber){
+      since=limit;
+      limit=limit+10
+      activePage++;
+      users.slice(since,limit);
+      displayClients();
+    }
+    
+  }
+
+  function changePageNumber(page){
+    if(activePage<page){
+      activePage=page;
+      limit=10*page;
+      since=limit-10;
+      users.slice(since,limit);
+      displayClients();
+    }else if(activePage>page){
+      let pageDifference=activePage-page;
+      since=since-pageDifference*10;
+      limit=limit-pageDifference*10;
+      activePage=page;
+      users.slice(since, limit);
+      displayClients();
+    }
+  } 
+
+  function prueba(){
+      let pageButtons=document.querySelectorAll('.btn_page');
+    for (let i = 0; i < pageButtons.length; i++) {
+      pageButtons[i].addEventListener("click",(e)=>{
+        e.preventDefault();
+        changePageNumber(parseInt(pageButtons[i].id));
+      })
+    }
+    }
+
+
+
+
+
+  btnAddclient.addEventListener("click", () => {
+    window.history.pushState({}, "", "/registClient");
+    loadComponent();
+  });
+  
+  
+
+  searchBar.addEventListener('keyup',()=>{
+    let mainTrContainer=document.querySelectorAll('.data-row');
+    const keyword=searchBar.value.toLowerCase().trim();
+   
+    for (let i = 0; i < mainTrContainer.length; i++) {
+      const tdList=mainTrContainer[i].getElementsByTagName('td');
+      let wordIsFound=false;
+      for (let j = 0; j < tdList.length; j++) {
+        let wordToCompare=tdList[j].textContent.toLowerCase().trim();
+        if(wordToCompare.includes(keyword)){
+          wordIsFound=true;
+          break;
+        }
+      }
+      mainTrContainer[i].style.display=wordIsFound ? '': 'none';
+    }
+  });
+
+   btnForward.addEventListener("click", (e)=>{
+    e.preventDefault();
+    changePageForward()
+  });
+  
+    btnBack.addEventListener('click', (e)=>{
+      e.preventDefault();
+      changePageBack();
+    })
+
+    
+    
+  
+  
+  
+  
   
   
 }
