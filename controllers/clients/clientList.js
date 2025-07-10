@@ -11,7 +11,7 @@ export function initClientList() {
   let limit=10;
   let activePage=1;
   let users=JSON.parse(localStorage.getItem("usersList"));
-  let pageNumber=users.length/limit;
+  let pageNumber=Math.ceil(users.length/limit);
 
 
   let displayClients=()=>{
@@ -20,7 +20,7 @@ export function initClientList() {
    
     tbodyContainer.innerHTML="";
 
-    for (let i = since; i < limit; i++) {
+    for (let i = since; i < limit && i < users.length; i++) {
       let trContainer=document.createElement('tr');
       trContainer.classList.add('data-row');
       let tdName=document.createElement('td');
@@ -72,7 +72,7 @@ export function initClientList() {
         })
     });
     loadButtonPage();
-    prueba();
+    changePageListeners();
   }
 
   let displayButtonOption=(id)=>{
@@ -101,13 +101,22 @@ export function initClientList() {
   //Display page buttons
   function loadButtonPage(){
     containerBtn.innerHTML="";
-    for (let i = 0; i < pageNumber; i++) {
+    if(pageNumber===0){
+      let buttonChange=document.createElement('button');
+      buttonChange.classList.add('btn_page');
+      buttonChange.setAttribute('id', 1);
+      buttonChange.innerHTML=1;
+      containerBtn.append(buttonChange);
+    }else {
+      for (let i = 0; i < pageNumber; i++) {
       let buttonChange=document.createElement('button');
       buttonChange.classList.add('btn_page');
       buttonChange.setAttribute('id', i+1);
       buttonChange.innerHTML=i+1;
       containerBtn.append(buttonChange);
+       }
     }
+    
   }
   function changePageBack(){
     if(activePage>1){
@@ -147,7 +156,7 @@ export function initClientList() {
     }
   } 
 
-  function prueba(){
+  function changePageListeners(){
       let pageButtons=document.querySelectorAll('.btn_page');
     for (let i = 0; i < pageButtons.length; i++) {
       pageButtons[i].addEventListener("click",(e)=>{
