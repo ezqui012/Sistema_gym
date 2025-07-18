@@ -42,8 +42,7 @@ export function initRegisterClient() {
     console.log("llega");
     let checkForm=true;
     let checks=[];
-    allInput.forEach((oneInput,i)=>{
-        
+    allInput.forEach((oneInput)=>{
         const isValid=validateField(oneInput,oneInput.id);
         if(!isValid){
           checks.push(false);

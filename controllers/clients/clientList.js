@@ -64,6 +64,23 @@ export function initClientList() {
       trContainer.appendChild(tdAction);
       tbodyContainer.appendChild(trContainer);
     }
+    editButton();
+    deleteAction();
+    loadButtonPage();
+    changePageListeners();
+  }
+  let editButton=()=>{
+    const editButton=document.querySelectorAll('.edit_data');
+    editButton.forEach(btn=>{
+      btn.addEventListener("click", (e)=>{
+        e.preventDefault();
+        let id=e.currentTarget.dataset.index;
+        window.history.pushState({}, "", `/editClient?id=${id}`);
+        loadComponent();
+      })
+    });
+  }
+  let deleteAction=()=>{
     const deleteClient=document.querySelectorAll('.delete_data');  
     deleteClient.forEach((btn)=>{
         btn.addEventListener("click", (e)=> {
@@ -71,8 +88,6 @@ export function initClientList() {
           deleteData(id);
         })
     });
-    loadButtonPage();
-    changePageListeners();
   }
 
   let displayButtonOption=(id)=>{
