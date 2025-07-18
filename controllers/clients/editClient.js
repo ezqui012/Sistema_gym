@@ -1,41 +1,100 @@
-import { Client } from "../../models/Client.js";
 export function initEditClient() {
   const btnSubmit = document.getElementById("submit");
-  const allInput= document.querySelectorAll('.field_data');
-  
-  btnSubmit.addEventListener("click", (e) => {
-    e.preventDefault();
-    let checkForm=true;
-    allInput.forEach((oneInput)=>{
-        const isValid=validateField(oneInput,oneInput.id);
-        if(!isValid){
-          checkForm = false;
+  const allInput = document.querySelectorAll(".field_data");
+  const btnSubmitModal = document.getElementById("modal_submit");
+  const btnCloseModal = document.getElementById("close_modal");
+   const toastContainer=document.querySelector('.toast_container');
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = parseInt(urlParams.get("id"));
+
+
+  function getUserData() {
+    let userFound=false;
+    let userList = JSON.parse(localStorage.getItem("usersList"));
+    for (let i = 0; i < userList.length; i++) {
+      if (userId === userList[i].id) {
+        const fieldName = document.getElementById("name");
+        fieldName.value = userList[i].name;
+        const fieldLastName = document.getElementById("lastName");
+        fieldLastName.value = userList[i].lastName;
+        const fieldPhone = document.getElementById("phone");
+        fieldPhone.value = userList[i].phone;
+        const fieldCi = document.getElementById("ci");
+        fieldCi.value = userList[i].ci;
+        const fieldNit = document.getElementById("nit");
+        fieldNit.value = userList[i].nit;
+        const fieldEmail = document.getElementById("email");
+        fieldEmail.value = userList[i].email;
+        const fieldMembership = document.getElementById("membership");
+        fieldMembership.value = userList[i].membership;
+        const fieldPhoto = document.getElementById("photo");
+        fieldPhoto.value = "photo";
+        userFound=true;
+        break;
+      } 
+    }
+    if(!userFound){
+      console.log(`usuario no encontrado`);
+    }
+  }
+  getUserData(); 
+
+  const showToast = (checkform) => {
+    let message = "";
+    let option = "";
+    if (checkform) {
+      message = "Se modificaron los datos con éxito!!";
+      option = "sucess";
+    } else {
+      message = "Hubo un error al guardar, intenta de nuevo";
+      option = "error";
+    }
+    let toastNotification = `<div class="toast ${option}">
+                            <p class="toast_message">${message}</p>
+                            </div>`;
+    return toastNotification;
+  };
+  const removeToast = () => {
+    toastContainer.removeChild(toastContainer.firstChild);
+  };
+
+  const updateUserProfile = (id) => {
+    let usersList = JSON.parse(localStorage.getItem("usersList")) || [];
+
+    for (let i = 0; i < usersList.length; i++) {
+      if (userId === usersList[i].id) {
+        const alertDialog = document.getElementById("alert-dialog");
+        let checkForm = alertDialog.dataset.checkForm;
+        if (checkForm) {
+          const toastNotification = showToast(checkForm);
+          toastContainer.innerHTML = toastNotification;
+          usersList[i].name = document.getElementById("name").value;
+          usersList[i].lastName = document.getElementById("lastName").value;
+          usersList[i].phone = document.getElementById("phone").value;
+          usersList[i].ci = document.getElementById("ci").value;
+          usersList[i].nit = document.getElementById("nit").value;
+          usersList[i].photo = document.getElementById("photo").value;
+          usersList[i].email = document.getElementById("email").value;
+          usersList[i].memberShip = document.getElementById("membership").value;
+          localStorage.setItem("usersList", JSON.stringify(usersList));
+          alertDialog.close();
+          console.log("Usuario registrado con exito");
+          setTimeout(() => {
+            removeToast();
+          }, 3000);
+          break;
+        } else {
+          const toastNotification = showToast(checkForm);
+          toastContainer.innerHTML = toastNotification;
+          console.log(showToast(checkForm));
+          break;
         }
-    });
-    console.log(checkForm)
-    if(checkForm){
-      let idClient = Date.now();
-      let name = document.getElementById("name").value;
-      let lastname = document.getElementById("lastName").value;
-      let phone = document.getElementById("phone").value;
-      let ci = document.getElementById("ci").value;
-      let nit = document.getElementById("nit").value;
-      let photo = document.getElementById("photo").value;
-      let email = document.getElementById("email").value;
-      let memberShip = document.getElementById("membership").value;
-      let newClient = new Client(idClient, name, lastname, phone, ci, nit, photo, email,0, 0, memberShip);
-      let usersList= JSON.parse(localStorage.getItem("usersList")) || [];
-      usersList.push(newClient);
-      localStorage.setItem("usersList", JSON.stringify(usersList));
-      console.log("Usuario registrado con exito");
-    }else console.log("Formulario invalido")
-
-  });
-
-
+      }
+    }
+  };
 
   const validateField = (field, id) => {
-    let isValid=false;
+    let isValid = false;
     const inputError = document.getElementById(`${id}_error`);
     let clearField = field.value.trim();
     if (id === "name") {
@@ -43,20 +102,20 @@ export function initEditClient() {
         field.classList.add("valid");
         field.classList.remove("error");
         inputError.classList.remove("show");
-        isValid=true;
+        isValid = true;
       } else if (clearField === "") {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent = "El campo se encuentra vacío";
-        isValid=false;
+        isValid = false;
       } else {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent =
           "El campo debe tener mas de 4 y menos de 18 palabras";
-          isValid=false;
+        isValid = false;
       }
     }
     if (id === "lastName") {
@@ -64,19 +123,20 @@ export function initEditClient() {
         field.classList.add("valid");
         field.classList.remove("error");
         inputError.classList.remove("show");
-        isValid=true;
+        isValid = true;
       } else if (clearField === "") {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent = "El campo se encuentra vacío";
-        isValid=false;
+        isValid = false;
       } else {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
-        inputError.textContent = "El campo debe tener mas de 4 y menos de 18 palabras";
-        isValid=false;
+        inputError.textContent =
+          "El campo debe tener mas de 4 y menos de 18 palabras";
+        isValid = false;
       }
     }
     if (id === "phone") {
@@ -84,19 +144,20 @@ export function initEditClient() {
         field.classList.add("valid");
         field.classList.remove("error");
         inputError.classList.remove("show");
-        isValid=true;
+        isValid = true;
       } else if (clearField === "") {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent = "El campo se encuentra vacío";
-        isValid=false;
+        isValid = false;
       } else {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
-        inputError.textContent = "El campo debe tener mas de 7 dígitos y menos de 10 dígitos";
-        isValid=false;
+        inputError.textContent =
+          "El campo debe tener mas de 7 dígitos y menos de 10 dígitos";
+        isValid = false;
       }
     }
     if (id === "ci") {
@@ -104,19 +165,20 @@ export function initEditClient() {
         field.classList.add("valid");
         field.classList.remove("error");
         inputError.classList.remove("show");
-        isValid=true;
+        isValid = true;
       } else if (clearField === "") {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent = "El campo se encuentra vacío";
-        isValid=false;
+        isValid = false;
       } else {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
-        inputError.textContent = "El campo debe tener mas de 7 dígitos y menos de 12 dígitos";
-        isValid=false;
+        inputError.textContent =
+          "El campo debe tener mas de 7 dígitos y menos de 12 dígitos";
+        isValid = false;
       }
     }
     if (id === "nit") {
@@ -124,20 +186,20 @@ export function initEditClient() {
         field.classList.add("valid");
         field.classList.remove("error");
         inputError.classList.remove("show");
-        isValid=true;
+        isValid = true;
       } else if (clearField === "") {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent = "El campo se encuentra vacío";
-        isValid=false;
+        isValid = false;
       } else {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent =
           "El campo debe tener mas de 1 dígitos y menos de 10 dígitos";
-        isValid=false;
+        isValid = false;
       }
     }
     if (id === "photo") {
@@ -145,18 +207,18 @@ export function initEditClient() {
         field.classList.add("valid");
         field.classList.remove("error");
         inputError.classList.remove("show");
-        isValid=true;
+        isValid = true;
       } else if (clearField === "") {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent = "Debe ingresar una foto de perfil";
-        isValid=false;
+        isValid = false;
       } else {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
-        isValid=false;
+        isValid = false;
       }
     }
     if (id && id === "membership") {
@@ -164,13 +226,13 @@ export function initEditClient() {
         field.classList.add("valid");
         field.classList.remove("error");
         inputError.classList.remove("show");
-        isValid=true;
+        isValid = true;
       } else {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent = "Elija una opción";
-        isValid=false;
+        isValid = false;
       }
     }
     if (id === "email") {
@@ -179,22 +241,52 @@ export function initEditClient() {
         field.classList.add("valid");
         field.classList.remove("error");
         inputError.classList.remove("show");
-        isValid=true;
+        isValid = true;
       } else if (clearField === "") {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent = "Debe ingresar un correo vàlido";
-        isValid=false;
+        isValid = false;
       } else {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent = "Debe ingresar un correo vàlido";
-        isValid=false;
+        isValid = false;
       }
     }
-     return isValid;
+    return isValid;
   };
 
+  btnSubmit.addEventListener("click", (e) => {
+    e.preventDefault();
+    const alertDialog = document.getElementById("alert-dialog");
+    console.log("llega");
+    let checkForm = true;
+    let checks = [];
+    allInput.forEach((oneInput, i) => {
+      const isValid = validateField(oneInput, oneInput.id);
+      if (!isValid) {
+        checks.push(false);
+      } else checks.push(true);
+    });
+    checkForm = checks.every((check) => check === true);
+    if (checkForm) {
+      alertDialog.dataset.checkForm = checkForm;
+      alertDialog.show();
+    }
+    
+  });
+  btnSubmitModal.addEventListener("click", (e) => {
+      e.preventDefault();
+      updateUserProfile(userId);
+    });
+
+  btnCloseModal.addEventListener("click", (e) => {
+    e.preventDefault();
+    const alertDialog = document.getElementById("alert-dialog");
+    alertDialog.close();
+  });
+  
 }

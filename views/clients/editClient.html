@@ -10,7 +10,7 @@
   </head>
   <body>
     <form id="form_data" class="form"  enctype="multipart/form-data">
-      <h2>REGISTRAR CLIENTE</h2>
+      <h2>EDITAR DATOS CLIENTE</h2>
       <div class="input_data_container">
         <!---Name Group -->
         <div class="input_container">
@@ -68,6 +68,16 @@
         </div>
       </div>
       <!---button Group -->
+      <div class="dialog-container">
+        <dialog id="alert-dialog">
+        <h3>Confirmar Registro</h3>
+        <div class="button_container_modal">
+          <button id="close_modal" class="btn_submit_modal cancel">Cerrar</button>
+          <button id="modal_submit" class="btn_submit_modal confirm">Confirmar</button>
+        </div>
+      </dialog>
+      </div>
+      <div class="toast_container"></div>
       <div class="button_container">
         <button class="btn_form btn_cancel">Cancelar</button>
         <button id="submit" class="btn_form btn_submit">Guardar</button>
