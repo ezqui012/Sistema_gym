@@ -1,6 +1,8 @@
 import { Client } from "../../models/Client.js";
+import { loadComponent } from "../../app/app.js";
 export function initRegisterClient() {
   const btnSubmit = document.getElementById("submits");  
+  const btnCancel = document.querySelector('.btn_cancel');
   const btnSubmitModal= document.getElementById('modal_submit');
   const btnCloseModal= document.getElementById('close_modal');
   const allInput= document.querySelectorAll('.field_data');
@@ -257,6 +259,11 @@ export function initRegisterClient() {
      return isValid;
   };
 
+  btnCancel.addEventListener("click", (e)=>{
+    e.preventDefault();
+    window.history.pushState({}, "", "/app");
+    loadComponent();
+  })
   // let validateDate=()=>{
 
   //   let newDate=[];
