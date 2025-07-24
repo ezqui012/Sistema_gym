@@ -68,8 +68,8 @@ function initView(path) {
     case "/employeeList":
       import("/controllers/employee/employeeList.js").then((mod) => mod.initEmployeeList()).catch((err)=>console.log(err));
       break;
-    case "/controllers/employee/registEmployee":
-      import("/employee/registEmployee.js").then((mod) => mod.initRegisterEmployee()).catch((err)=>console.log(err));
+    case "/registEmployee":
+      import("/controllers/employee/registEmployee.js").then((mod) => mod.initRegisterEmployee()).catch((err)=>console.log(err));
       break;
     case "/report":
       import("../reports/report1.js").then((mod) => mod.initReport()).catch((err)=>console.log(err));
