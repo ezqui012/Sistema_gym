@@ -35,7 +35,7 @@ export function initRegisterEmployee() {
       let name = document.getElementById("name").value;
       let lastName = document.getElementById("lastName").value;
       let phone = document.getElementById("phone").value;
-      let ci = document.getElementById("name").value;
+      let ci = document.getElementById("ci").value;
       let photo = "foto";
       let schedule = document.getElementById("schedule").value;
       let role = document.getElementById("role").value;
