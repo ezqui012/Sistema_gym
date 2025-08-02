@@ -78,7 +78,6 @@ export function initEditClient() {
           usersList[i].memberShip = document.getElementById("membership").value;
           localStorage.setItem("usersList", JSON.stringify(usersList));
           alertDialog.close();
-          console.log("Usuario registrado con exito");
           setTimeout(() => {
             removeToast();
           }, 3000);
@@ -86,7 +85,7 @@ export function initEditClient() {
         } else {
           const toastNotification = showToast(checkForm);
           toastContainer.innerHTML = toastNotification;
-          console.log(showToast(checkForm));
+          
           break;
         }
       }
@@ -265,7 +264,7 @@ export function initEditClient() {
     console.log("llega");
     let checkForm = true;
     let checks = [];
-    allInput.forEach((oneInput, i) => {
+    allInput.forEach((oneInput) => {
       const isValid = validateField(oneInput, oneInput.id);
       if (!isValid) {
         checks.push(false);

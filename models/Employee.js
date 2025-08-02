@@ -10,6 +10,18 @@ export class Employee{
         this.role=role;
         this.schedule=schedule;
     }
+    toObject(){
+        return{
+            name: this.name,
+            lastname: this.lastname,
+            emai: this.email,
+            phone: this.phone,
+            ci: this.ci,
+            photo: this.photo,
+            schedule: this.schedule,
+            role: this.role
+        }
+    }
     //getters
     getEmployeeId(){
         return this.id;

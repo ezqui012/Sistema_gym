@@ -1,74 +1,100 @@
-import { Employee } from "../../models/Employee.js";
 import { loadComponent } from "../../app/app.js";
-export function initRegisterEmployee() {
-  const allInput = document.querySelectorAll(".field_data");
-  const btnSbumit = document.querySelector(".btn_submit");
-  const btnCancel = document.querySelector('.btn_cancel');
-  const btnModalSubmit = document.getElementById("modal_submit");
-  const btnCloseModal = document.getElementById("close_modal");
+export function initEditEmployee() {
+  const btnSubmit = document.querySelector(".btn_submit");
+  const btnCancelSubmit = document.querySelector('.btn_cancel');
+  const allInput = document.querySelectorAll('.field_data');
+  const btnCancelModal=document.getElementById('close_modal');
+  const btnConfirmModal= document.getElementById('modal_submit');
   const toastContainer=document.querySelector('.toast_container');
-  btnModalSubmit.replaceWith(btnModalSubmit.cloneNode(true));
-  const newBtnSubmitModal = document.getElementById('modal_submit');
+  const urlParams = new URLSearchParams(window.location.search);
+  const empId = parseInt(urlParams.get("id"));
+  const getDataEmployee = () => {
+    let employee = {};
+    const dataEmployee = JSON.parse(localStorage.getItem("employeeList"));
+    for (let i = 0; i < dataEmployee.length; i++) {
+      if (dataEmployee[i].id === empId) {
+        employee = dataEmployee[i];
+        break;
+      }
+    }
+    return employee;
+  };
   
-  const showToast=(checkform)=>{
-    let message='';
-    let option='';
-    if(checkform){
-      message='Se registro al usuario con éxito!!';
-      option='sucess';
-    }else{
-      message='Hubo un error al registrar, intenta de nuevo';
-      option='error';
-    }
-    let toastNotification=`<div class="toast ${option}">
-                           <p class="toast_message">${message}</p>
-                           </div>`
-    return toastNotification;
-  }
-  const removeToast=()=>{
-    toastContainer.removeChild(toastContainer.firstChild);
-  }
-  const submitEmployee = () => {
-    const alertDialog = document.getElementById("alert-dialog");
-    let checkForm = alertDialog.dataset.checkForm;
-    if (checkForm) {
-      let idEmployee = Date.now();
-      let name = document.getElementById("name").value;
-      let lastName = document.getElementById("lastName").value;
-      let phone = document.getElementById("phone").value;
-      let ci = document.getElementById("ci").value;
-      let photo = "foto";
-      let schedule = document.getElementById("schedule").value;
-      let role = document.getElementById("role").value;
-      let email = document.getElementById("email").value;
-      let newEmployee = new Employee(
-        idEmployee,
-        name,
-        lastName,
-        email,
-        phone,
-        ci,
-        photo,
-        schedule,
-        role
-      );
-      let employeesList =
-        JSON.parse(localStorage.getItem("employeeList")) || [];
-      employeesList.push(newEmployee);
-      localStorage.setItem("employeeList", JSON.stringify(employeesList));
-      console.log("se registro usuario con exito");
-      alertDialog.close();
-      const toastNotification = showToast(checkForm);
-      toastContainer.innerHTML = toastNotification;
-      setTimeout(() => {
-        removeToast();
-      }, 3000);
+  const showToast = (checkform) => {
+    let message = "";
+    let option = "";
+    if (checkform) {
+      message = "Se modificaron los datos con éxito!!";
+      option = "sucess";
     } else {
-      const toastNotification = showToast(checkForm);
-      toastContainer.innerHTML = toastNotification;
-      console.log(showToast(checkForm));
+      message = "Hubo un error al guardar, intenta de nuevo";
+      option = "error";
     }
-    toastContainer.addEventListener("click", () => removeToast());
+    let toastNotification = `<div class="toast ${option}">
+                            <p class="toast_message">${message}</p>
+                            </div>`;
+    return toastNotification;
+  };
+  const removeToast = () => {
+    toastContainer.innerHTML="";
+    
+  };
+  const loadEmployeeData = () => {
+    const empData = getDataEmployee();
+    if (empData) {
+      const name = document.getElementById("name");
+      name.value = empData.name;
+      const lastname = document.getElementById("lastName");
+      lastname.value = empData.lastname;
+      const email = document.getElementById("email");
+      email.value = empData.email;
+      const phone = document.getElementById("phone");
+      phone.value = empData.phone;
+      const ci = document.getElementById("ci");
+      ci.value = empData.ci;
+      //   const photo = document.getElementById("photo");
+      //   photo.value = empData.photo;
+      const schedule = document.getElementById("schedule");
+      schedule.value = empData.schedule;
+      const role = document.getElementById("role");
+      role.value = empData.role;
+    } else {
+      console.log("Usuario no encontrado");
+    }
+  };
+  loadEmployeeData();
+
+  const saveDataEmployee = (id) => {
+    let employeeList = JSON.parse(localStorage.getItem("employeeList")) || [];
+
+    for (let i = 0; i < employeeList.length; i++) {
+      const alertDialog = document.getElementById("alert-dialog");
+      let checkForm = alertDialog.dataset.checkForm;
+      if (checkForm) {
+        const toastNotification = showToast(checkForm);
+        toastContainer.innerHTML = toastNotification;
+        employeeList[i].name = document.getElementById("name").value;
+        employeeList[i].lastname = document.getElementById("lastName").value;
+        employeeList[i].email = document.getElementById("email").value;
+        employeeList[i].phone = document.getElementById("phone").value;
+        employeeList[i].ci = document.getElementById("ci").value;
+        employeeList[i].photo = document.getElementById("photo").value;
+        employeeList[i].schedule = document.getElementById("schedule").value;
+        employeeList[i].role = document.getElementById("role").value;
+        localStorage.setItem("employeeList", JSON.stringify(employeeList));
+        alertDialog.close();
+          setTimeout(() => {
+            removeToast();
+          }, 3000);
+          break;
+      } else {
+          const toastNotification = showToast(checkForm);
+          toastContainer.insertAdjacentHTML = toastNotification;
+          console.log(showToast(checkForm));
+          break;
+        }
+    }
+    
   };
 
   const validateField = (field, id) => {
@@ -139,7 +165,7 @@ export function initRegisterEmployee() {
       }
     }
     if (id === "ci") {
-      if (clearField && clearField.length >= 1 && clearField.length <= 10) {
+      if (clearField && clearField.length >= 7 && clearField.length <= 12) {
         field.classList.add("valid");
         field.classList.remove("error");
         inputError.classList.remove("show");
@@ -155,7 +181,7 @@ export function initRegisterEmployee() {
         field.classList.remove("valid");
         inputError.classList.add("show");
         inputError.textContent =
-          "El campo debe tener mas de 1 dígitos y menos de 10 dígitos";
+          "El campo debe tener mas de 7 dígitos y menos de 12 dígitos";
         isValid = false;
       }
     }
@@ -188,7 +214,7 @@ export function initRegisterEmployee() {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
-        inputError.textContent = "Elija una opción";
+        inputError.textContent = "Elija un horario";
         isValid = false;
       }
     }
@@ -202,7 +228,7 @@ export function initRegisterEmployee() {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
-        inputError.textContent = "Elija una opción";
+        inputError.textContent = "Elija tipo de empleado";
         isValid = false;
       }
     }
@@ -217,7 +243,7 @@ export function initRegisterEmployee() {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
-        inputError.textContent = "El campo se encuentra vacío";
+        inputError.textContent = "Debe ingresar un correo vàlido";
         isValid = false;
       } else {
         field.classList.add("error");
@@ -230,40 +256,44 @@ export function initRegisterEmployee() {
     return isValid;
   };
 
-  btnSbumit.addEventListener("click", (e) => {
-    e.preventDefault();
-    const alertDialog = document.getElementById("alert-dialog");
-    let checkForm = false;
-    let checks = [];
-    allInput.forEach((field) => {
-      const isValid = validateField(field, field.id);
-      if (!isValid) {
+  
+  btnSubmit.addEventListener("click", () => {
+    
+    const alertDialog=document.getElementById('alert-dialog');
+    let checkForm=true;
+    let checks=[];
+    allInput.forEach(input=>{
+      const isValid=validateField(input, input.id);
+      if(!isValid){
         checks.push(false);
-      } else {
+      }else {
         checks.push(true);
       }
-    });
-    checkForm = checks.every((check) => check === true);
-    if (checkForm) {
-      alertDialog.dataset.checkForm = checkForm;
+    })
+    checkForm = checks.every(check=> check===true);
+    if(checkForm){
+      alertDialog.dataset.checkForm=checkForm;
       alertDialog.show();
     }
+    
   });
-  newBtnSubmitModal.addEventListener("click", (e) => {
-    e.preventDefault();
-    submitEmployee();
-  });
-  btnCancel.addEventListener("click", (e)=>{
-    e.preventDefault()
-    window.history.pushState({}, "", "/app");
+
+  btnCancelSubmit.addEventListener("click", ()=>{
+    window.history.pushState({}, "", "/employeeList");
     loadComponent();
-  });
-  
-  btnCloseModal.addEventListener("click", (e)=>{
-    e.preventDefault();
-    const alertDialog= document.getElementById('alert-dialog');
+  })
+
+  btnCancelModal.addEventListener("click", ()=>{
+    const alertDialog=document.getElementById('alert-dialog');
     alertDialog.close();
   })
+
+  btnConfirmModal.addEventListener("click", (e)=>{
+    e.preventDefault()
+    saveDataEmployee();
+  })  
+
+
 }
 
-initRegisterEmployee();
+initEditEmployee();
