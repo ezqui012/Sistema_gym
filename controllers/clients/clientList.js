@@ -31,11 +31,6 @@ export function initClientList() {
       tdLastName.textContent = users[i].lastName;
       trContainer.appendChild(tdLastName);
 
-      let tdInitDate = document.createElement("td");
-      tdInitDate.classList.add("data-table");
-      tdInitDate.textContent = "fechaInici";
-      trContainer.appendChild(tdInitDate);
-
       let tdExpireDate = document.createElement("td");
       tdExpireDate.classList.add("data-table");
       tdExpireDate.textContent = "expira";
@@ -45,11 +40,6 @@ export function initClientList() {
       tdCi.classList.add("data-table");
       tdCi.textContent = users[i].ci;
       trContainer.appendChild(tdCi);
-
-      let tdMembership = document.createElement("td");
-      tdMembership.classList.add("data-table");
-      tdMembership.textContent = users[i].membership;
-      trContainer.appendChild(tdMembership);
 
       let tdEmail = document.createElement("td");
       tdEmail.classList.add("data-table");
