@@ -1,9 +1,11 @@
+import { loadComponent } from "../../app/app.js";
 export function initEditClient() {
   const btnSubmit = document.getElementById("submit");
+  const btnCancelSubmit = document.querySelector('.btn_cancel');
   const allInput = document.querySelectorAll(".field_data");
   const btnSubmitModal = document.getElementById("modal_submit");
   const btnCloseModal = document.getElementById("close_modal");
-   const toastContainer=document.querySelector('.toast_container');
+  const toastContainer=document.querySelector('.toast_container');
   const urlParams = new URLSearchParams(window.location.search);
   const userId = parseInt(urlParams.get("id"));
 
@@ -25,8 +27,6 @@ export function initEditClient() {
         fieldNit.value = userList[i].nit;
         const fieldEmail = document.getElementById("email");
         fieldEmail.value = userList[i].email;
-        const fieldMembership = document.getElementById("membership");
-        fieldMembership.value = userList[i].membership;
         const fieldPhoto = document.getElementById("photo");
         fieldPhoto.value = "photo";
         userFound=true;
@@ -75,7 +75,6 @@ export function initEditClient() {
           usersList[i].nit = document.getElementById("nit").value;
           usersList[i].photo = document.getElementById("photo").value;
           usersList[i].email = document.getElementById("email").value;
-          usersList[i].memberShip = document.getElementById("membership").value;
           localStorage.setItem("usersList", JSON.stringify(usersList));
           alertDialog.close();
           setTimeout(() => {
@@ -220,20 +219,6 @@ export function initEditClient() {
         isValid = false;
       }
     }
-    if (id && id === "membership") {
-      if (clearField !== "mem0") {
-        field.classList.add("valid");
-        field.classList.remove("error");
-        inputError.classList.remove("show");
-        isValid = true;
-      } else {
-        field.classList.add("error");
-        field.classList.remove("valid");
-        inputError.classList.add("show");
-        inputError.textContent = "Elija una opción";
-        isValid = false;
-      }
-    }
     if (id === "email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (clearField && emailRegex.test(clearField)) {
@@ -277,13 +262,17 @@ export function initEditClient() {
     }
     
   });
+
+  btnCancelSubmit.addEventListener('click',()=>{
+    window.history.pushState({}, "", "/clientList");
+    loadComponent();
+  })
   btnSubmitModal.addEventListener("click", (e) => {
       e.preventDefault();
       updateUserProfile(userId);
     });
 
-  btnCloseModal.addEventListener("click", (e) => {
-    e.preventDefault();
+  btnCloseModal.addEventListener("click", () => {
     const alertDialog = document.getElementById("alert-dialog");
     alertDialog.close();
   });

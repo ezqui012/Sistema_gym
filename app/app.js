@@ -27,7 +27,8 @@ const routes = {
   "/clientList": "../views/clients/clientList.html",
   "/report": "/reports/report1.html",
   "/editClient": "../views/clients/editClient.html",
-  "/editEmployee": "../views/employee/editEmployee.html"
+  "/editEmployee": "../views/employee/editEmployee.html",
+  "/membership": "../views/membership/membership.html"
 };
 
 const loadComponent = async () => {
@@ -80,6 +81,9 @@ function initView(path) {
       break;
     case "/editEmployee":
       import("/controllers/employee/editEmployee.js").then((mod) => mod.initEditEmployee()).catch((err)=>console.log(err));
+      break; 
+    case "/membership":
+      import("/controllers/membership/membership.js").then((mod) => mod.initMembership()).catch((err)=>console.log(err));
       break;  
   }
 

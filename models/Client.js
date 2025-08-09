@@ -1,6 +1,6 @@
 export class Client {
 
-    constructor (id, name, lastName, phone, ci, nit, photo, email, initDate, endDate, membership){
+    constructor (id, name, lastName, phone, ci, nit, photo, email){
         this.id=id;
         this.name=name;
         this.lastName=lastName;
@@ -9,9 +9,6 @@ export class Client {
         this.nit=nit;
         this.photo=photo
         this.email=email
-        this.initDate=initDate;
-        this.endDate=endDate;
-        this.membership=membership;
     }
     getId(){
         return this.id;
@@ -31,15 +28,7 @@ export class Client {
     getEmail(){
         return this.email;
     }
-    getInitDate(){
-        return this.initDate;
-    }
-    getEndDate(){
-        return this.endDate;
-    }    
-    getMembership(){
-        return this.membership;
-    }
+
     //setters
     setId(value){
         this.id=value;
@@ -59,14 +48,6 @@ export class Client {
     setEmail(value){
         this.email=value;
     }
-    setInitDate(value){
-         this.initDate=value;
-    }
-    setEndDate(value){
-         this.endDate=value;
-    }    
-    setMembership(value){
-         this.membership=value;
-    }
+  
 
 }

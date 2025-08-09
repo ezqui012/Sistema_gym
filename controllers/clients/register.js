@@ -76,8 +76,7 @@ export function initRegisterClient() {
       let nit = document.getElementById("nit").value;
       let photo = document.getElementById("photo").value;
       let email = document.getElementById("email").value;
-      let memberShip = document.getElementById("membership").value;
-      let newClient = new Client(idClient, name, lastname, phone, ci, nit, photo, email,0, 0, memberShip);
+      let newClient = new Client(idClient, name, lastname, phone, ci, nit, photo, email);
       let usersList= JSON.parse(localStorage.getItem("usersList")) || [];
       usersList.push(newClient);
       localStorage.setItem("usersList", JSON.stringify(usersList));
@@ -218,20 +217,6 @@ export function initRegisterClient() {
         field.classList.add("error");
         field.classList.remove("valid");
         inputError.classList.add("show");
-        isValid=false;
-      }
-    }
-    if (id && id === "membership") {
-      if (clearField !== "mem0") {
-        field.classList.add("valid");
-        field.classList.remove("error");
-        inputError.classList.remove("show");
-        isValid=true;
-      } else {
-        field.classList.add("error");
-        field.classList.remove("valid");
-        inputError.classList.add("show");
-        inputError.textContent = "Elija una opción";
         isValid=false;
       }
     }
