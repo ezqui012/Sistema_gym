@@ -85,6 +85,8 @@ p.error{
     font-size: 11px;
     color: #e69f39;
     display: none;
+    overflow-wrap: break-word;
+    width: 250px;
 }
 p.error.show{
     display: block;
