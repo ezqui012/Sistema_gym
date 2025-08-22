@@ -85,6 +85,8 @@ p.error{
     font-size: 11px;
     color: #e69f39;
     display: none;
+    overflow-wrap: break-word;
+    width: 250px;
 }
 p.error.show{
     display: block;
@@ -159,4 +161,19 @@ p.error.show{
 }
 .toast.error{
     background-color: red;
+}
+
+/*Membership Type */
+#description{
+    height: 100px;
+}
+#input_container_membership{
+    display: flex;
+    flex-direction: column;    
+    row-gap: 5px;
+    
+}
+.field_membership{
+    width: 350px;
+    
 }
