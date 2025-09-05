@@ -3,6 +3,8 @@ import { loadComponent } from "../../app/app.js";
 export function initMembership() {
   const selectMem = document.getElementById("membershipType");
   const selectClientEntry = document.getElementById("dateClientEntry");
+  
+    
   function getClientList() {
     const clientList = JSON.parse(localStorage.getItem("usersList"));
     return clientList;
@@ -27,6 +29,7 @@ export function initMembership() {
       selectClient.append(newOption);
     }
   }
+
   function loadMembershipTypeList() {
     const selectMembershipType = document.getElementById("membershipType");
     selectMembershipType.innerHTML = "";
@@ -34,33 +37,38 @@ export function initMembership() {
     for (let i = 0; i < membershipTypeList.length; i++) {
       const newOption = document.createElement("option");
       newOption.classList.add("opt-memberType");
-      newOption.value = membershipTypeList[i].id;
+      newOption.setAttribute('id', membershipTypeList[i].id);
+      newOption.setAttribute('value', `${membershipTypeList[i]._membershipName}`)
       newOption.text = `${membershipTypeList[i]._membershipName}`;
-      selectMembershipType.append(newOption);
+      selectMembershipType.appendChild(newOption);
     }
   }
-  function loadMembershipTypeData() {}
+
+
+  const selectedMembershipData=(id)=>{
+    const membershipList=getMembershipTypeList();
+    let membershipSelected=null;
+    if(membershipList){
+      membershipSelected=membershipList.find(memebership =>memebership.id===id);
+    }
+
+    return membershipSelected;
+  }
 
 
   const validateDate = () => {
-    let newDate = [];
-    const actualDay = new Date().getDate();
-    const actualMonth = new Date().getMonth() + 1;
+    let newDate = '';
+    let actualDay = new Date().getDate();
+    let actualMonth = new Date().getMonth() + 1;
     const actualYear = new Date().getFullYear();
     if(actualMonth<10){
-      newDate[1] = '0' + actualMonth;
-    }else{
-      newDate[1] = actualMonth
+      actualMonth = '0' + actualMonth;
     }
     if(actualDay<10){
-      newDate[2] = '0' + actualDay;
-    }else{
-      newDate[2] = actualDay;
+      actualDay = '0' + actualDay;
     }
-    newDate[0] = actualYear;
-    let newDateConverted = newDate.toString();
-    newDateConverted = newDateConverted.replaceAll(",", "-");
-    selectClientEntry.setAttribute("min", newDateConverted);
+    newDate=`${actualYear}-${actualMonth}-${actualDay}`
+    selectClientEntry.setAttribute("min", newDate);
   };
   
 
@@ -68,53 +76,73 @@ export function initMembership() {
     if(!inputValue)return null;
  
     const [year,month,day]=inputValue.split('-');
-    console.log(day);
-    return new Date (year,month,day);
+    return new Date (year,month-1,day);
+  }
+
+  const formatDate=(date)=>{
+    let formatedDate='';
+    let day = date.getDate();
+    let month = date.getMonth()+1;
+    const year = date.getFullYear();
+    if(day<10){
+      day='0' + day;
+    }
+    if(month<10){
+      month='0' + month;
+    }
+    return formatedDate=`${day}/${month}/${year}`;
   }
 
   const addDays=(initDate, days)=>{
     const finalDate=parseInputDate(initDate);
-    let formatedDate=[];
-    finalDate.setDate(finalDate.getDate()+days);
-    formatedDate[0]=finalDate.getDate();
-    formatedDate[1]=finalDate.getMonth();
-    formatedDate[2]=finalDate.getFullYear();
-    formatedDate=formatedDate.join('/');  
-    return formatedDate;
+    finalDate.setDate(finalDate.getDate()+days);   
+    return formatDate(finalDate);
   }
 
   const displayDateData=(initDate, durationDays)=>{
     const getFinalDate=addDays(initDate, durationDays);
     const pInitDate = document.querySelector('.initDate_data');
     const pEndDate = document.querySelector('.endDate_data');
-    const initialDate= initDate.replaceAll('-','/'); 
-    pInitDate.innerHTML=`<strong class="desc_membership_data">Fecha Inicio:</strong>${initialDate}`;
+    
+    const initialDate= parseInputDate(initDate);
+    const initialDateFormated = formatDate(initialDate);
+    pInitDate.innerHTML=`<strong class="desc_membership_data">Fecha Inicio:</strong>${initialDateFormated}`;
     pEndDate.innerHTML=`<strong class="desc_membership_data">Fecha Fin:</strong>${getFinalDate}`;
   }
   
+  const displayMembershipData=()=>{
+    const optionSelected=selectMem.options[selectMem.selectedIndex];
+    const optionId=optionSelected.id;
+    const pPrice = document.querySelector(".price_data");
+    const pDuration = document.querySelector(".duration_data");    
+    const memberShiptTypeList = getMembershipTypeList();
+    const data = memberShiptTypeList.find(membership=>membership.id===parseInt(optionId));
+    pPrice.innerHTML = `<strong class="desc_membership_data">Precio:</strong>${data._price} bs`;
+    pDuration.innerHTML = `<strong class="desc_membership_data">Duracion:</strong>${data._duration} dias`;
+  }
+
+
   selectClientEntry.addEventListener('change',(e)=>{
     e.preventDefault();
-
-    const membershipDuration=30;
+    const optionSelected=selectMem.options[selectMem.selectedIndex];
+    const optionId=parseInt(optionSelected.id);
+    const membership=selectedMembershipData(optionId);
+    console.log(parseInt(membership._duration));
     const entryDate=selectClientEntry.value;
     
-    displayDateData(entryDate,10);
+    displayDateData(entryDate,parseInt(membership._duration));
    
   })
   
   selectMem.addEventListener("change", (e) => {
     e.preventDefault();
-    const pPrice = document.querySelector(".price_data");
-    const pDuration = document.querySelector(".duration_data");
-    const memberShiptTypeList = getMembershipTypeList();
-    const data = memberShiptTypeList.find(
-      (membership) => parseInt(selectMem.value) === membership.id
-    );
-    pPrice.innerHTML = `<strong class="desc_membership_data">Precio:</strong>${data._price} bs`;
-    pDuration.innerHTML = `<strong class="desc_membership_data">Duracion:</strong>${data._duration} dias`;
+    displayMembershipData();
   });
+
+
   validateDate();
   loadMembershipTypeList();
   loadClientList();
+  console.log(selectMem.firstChild)
 }
 initMembership();
