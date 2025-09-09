@@ -21,9 +21,9 @@ export function initMembershipType() {
       newMembershipType.duration = document.getElementById("duration").value;
       newMembershipType.description =
         document.getElementById("description").value;
-      let membershipList = JSON.parse(localStorage.getItem("membershipList")) || [];
-      membershipList.push(newMembershipType);
-      localStorage.setItem("membershipList", JSON.stringify(membershipList));
+      let membershipTypeList = JSON.parse(localStorage.getItem("membershipTypeList")) || [];
+      membershipTypeList.push(newMembershipType);
+      localStorage.setItem("membershipTypeList", JSON.stringify(membershipTypeList));
       alertDialog.close();
       const toastNotification = showToast(checkDialog);
       toastContainer.innerHTML = toastNotification;

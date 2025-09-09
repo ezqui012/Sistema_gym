@@ -249,23 +249,7 @@ export function initRegisterClient() {
     window.history.pushState({}, "", "/app");
     loadComponent();
   })
-  // let validateDate=()=>{
-
-  //   let newDate=[];
-  //   let actualDay=new Date().getDate();
-  //   let actualMonth=new Date().getMonth()+1;
-  //   let actualYear=new Date().getFullYear();
-  //   let actualTime= new Date().getTime();
-  //   newDate[0]=actualYear;
-  //   newDate[1]=actualMonth;
-  //   newDate[2]=actualDay;
-  //   let res=newDate.toString();
-  //   res=res.replaceAll(",","-");
-  //   let newFecha=new Date(res);
-  //   console.log(actualTime)
-  //   console.log(res);
-  // }
-  // validateDate();
+  
 }
 
 initRegisterClient();
