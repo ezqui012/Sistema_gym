@@ -13,24 +13,19 @@
         <!---Client List -->
         <div class="input_container">
           <label for="client" class="field_name">Cliente</label>
-          <select class="field_data membershipType" name="client" id="client">
-            <option value="opt-0" class="opt-client">Asignar Cliente</option>
-            
-          </select>
-          <p class="error" id="clientList_error"></p>
+          <select class="field_data membershipType" name="client" id="client"></select>
+          <p class="error" id="client_error"></p>
         </div>
         <!---Membership Type -->
         <div class="input_container">
           <label for="membershipType" class="field_name">Tipo de Membresia</label>
-          <select class="field_data membershipType" name="memberType" id="membershipType">
-            <option class="opt-membershipType" id="opt-p" value="opt-0">Elegir membresia</option> 
-          </select>
+          <select class="field_data membershipType" name="memberType" id="membershipType"></select>
           <p class="error" id="membershipType_error"></p>
         </div>
         <!---Init Date-->
         <div class="input_container">
           <label for="dateClientEntry" class="field_name">Fecha de ingreso</label>
-          <input type="date" class="field_data dateClientEntry" id="dateClientEntry""/>
+          <input type="date" class="field_data membershipType" id="dateClientEntry""/>
           <p class="error" id="dateClientEntry_error"></p>
         </div>
         
@@ -40,22 +35,21 @@
           <p class="membership_data duration_data"></p>
           <p class="membership_data initDate_data"></p>
           <p class="membership_data endDate_data"></p>
-          <p class="membership_data stateMembership_data"><strong class="desc_membership_data">Estado:</strong>Activa/Vencida/Cancelada</p>
         </div>
       <!--Button group-->
       <div class="dialog-container">
         <dialog id="alert-dialog">
         <h3>Confirmar Registro</h3>
         <div class="button_container_modal">
-          <button id="close_modal" class="btn_submit_modal cancel">Cerrar</button>
+          <button type="button" id="close_modal" class="btn_submit_modal cancel">Cerrar</button>
           <button id="modal_submit" class="btn_submit_modal confirm">Confirmar</button>
         </div>
       </dialog>
       </div>
       <div class="toast_container"></div>
       <div class="button_container">
-        <button class="btn_form btn_cancel">Cancelar</button>
-        <button class="btn_form btn_submit">Añadir</button>
+        <button type="button" class="btn_form btn_cancel">Cancelar</button>
+        <button type="button" class="btn_form btn_submit">Añadir</button>
       </div>
     </form>
     <script type="module" src="../../controllers/membership/membership.js"></script>

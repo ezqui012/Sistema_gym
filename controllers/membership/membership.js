@@ -1,10 +1,18 @@
 import { loadComponent } from "../../app/app.js";
-//import { membership } from "../../models/Membership.js";
+import { Membership } from "../../models/Membership.js";
 export function initMembership() {
+  const allInput = document.querySelectorAll('.field_data')
   const selectMem = document.getElementById("membershipType");
   const selectClientEntry = document.getElementById("dateClientEntry");
+  const btnSubmit = document.querySelector(".btn_submit");
+  const btnCancel = document.querySelector(".btn_cancel");
+  const btnModalSubmit = document.getElementById("modal_submit");
+  const btnModalCancel = document.getElementById("close_modal");
+  btnModalSubmit.replaceWith(btnModalSubmit.cloneNode(true));
+  const newBtnSubmitModal = document.getElementById('modal_submit');
   
-    
+  let endDate = "";
+
   function getClientList() {
     const clientList = JSON.parse(localStorage.getItem("usersList"));
     return clientList;
@@ -12,7 +20,7 @@ export function initMembership() {
 
   function getMembershipTypeList() {
     const membershiptTypeList = JSON.parse(
-      localStorage.getItem("membershipList")
+      localStorage.getItem("membershipTypeList")
     );
     return membershiptTypeList;
   }
@@ -20,6 +28,11 @@ export function initMembership() {
   function loadClientList() {
     const selectClient = document.getElementById("client");
     selectClient.innerHTML = "";
+    const firstOpt = document.createElement("OPTION");
+    firstOpt.classList.add("opt-client");
+    firstOpt.setAttribute("value", "client0");
+    firstOpt.textContent = "Asignar cliente";
+    selectClient.append(firstOpt);
     const clients = getClientList();
     for (let i = 0; i < clients.length; i++) {
       const newOption = document.createElement("option");
@@ -33,116 +46,225 @@ export function initMembership() {
   function loadMembershipTypeList() {
     const selectMembershipType = document.getElementById("membershipType");
     selectMembershipType.innerHTML = "";
+    const firstOpt = document.createElement("OPTION");
+    firstOpt.classList.add("opt-memberType");
+    firstOpt.setAttribute("value", "memType0");
+    firstOpt.textContent = "Asignar Tipo de Membresia";
+    selectMembershipType.append(firstOpt);
     const membershipTypeList = getMembershipTypeList();
     for (let i = 0; i < membershipTypeList.length; i++) {
       const newOption = document.createElement("option");
       newOption.classList.add("opt-memberType");
-      newOption.setAttribute('id', membershipTypeList[i].id);
-      newOption.setAttribute('value', `${membershipTypeList[i]._membershipName}`)
+      newOption.setAttribute("id", membershipTypeList[i].id);
+      newOption.setAttribute(
+        "value",
+        `${membershipTypeList[i]._membershipName}`
+      );
       newOption.text = `${membershipTypeList[i]._membershipName}`;
       selectMembershipType.appendChild(newOption);
     }
   }
 
-
-  const selectedMembershipData=(id)=>{
-    const membershipList=getMembershipTypeList();
-    let membershipSelected=null;
-    if(membershipList){
-      membershipSelected=membershipList.find(memebership =>memebership.id===id);
+  const selectedMembershipData = (id) => {
+    const membershipList = getMembershipTypeList();
+    let membershipSelected = null;
+    if (membershipList) {
+      membershipSelected = membershipList.find(
+        (memebership) => memebership.id === id
+      );
     }
 
     return membershipSelected;
-  }
-
+  };
 
   const validateDate = () => {
-    let newDate = '';
+    let newDate = "";
     let actualDay = new Date().getDate();
     let actualMonth = new Date().getMonth() + 1;
     const actualYear = new Date().getFullYear();
-    if(actualMonth<10){
-      actualMonth = '0' + actualMonth;
+    if (actualMonth < 10) {
+      actualMonth = "0" + actualMonth;
     }
-    if(actualDay<10){
-      actualDay = '0' + actualDay;
+    if (actualDay < 10) {
+      actualDay = "0" + actualDay;
     }
-    newDate=`${actualYear}-${actualMonth}-${actualDay}`
+    newDate = `${actualYear}-${actualMonth}-${actualDay}`;
     selectClientEntry.setAttribute("min", newDate);
   };
-  
 
-  const parseInputDate=(inputValue)=>{
-    if(!inputValue)return null;
- 
-    const [year,month,day]=inputValue.split('-');
-    return new Date (year,month-1,day);
-  }
+  const parseInputDate = (inputValue) => {
+    if (!inputValue) return null;
 
-  const formatDate=(date)=>{
-    let formatedDate='';
+    const [year, month, day] = inputValue.split("-");
+    return new Date(year, month - 1, day);
+  };
+
+  const formatDate = (date) => {
+    let formatedDate = "";
     let day = date.getDate();
-    let month = date.getMonth()+1;
+    let month = date.getMonth() + 1;
     const year = date.getFullYear();
-    if(day<10){
-      day='0' + day;
+    if (day < 10) {
+      day = "0" + day;
     }
-    if(month<10){
-      month='0' + month;
+    if (month < 10) {
+      month = "0" + month;
     }
-    return formatedDate=`${day}/${month}/${year}`;
-  }
+    return (formatedDate = `${day}/${month}/${year}`);
+  };
 
-  const addDays=(initDate, days)=>{
-    const finalDate=parseInputDate(initDate);
-    finalDate.setDate(finalDate.getDate()+days);   
+  const addDays = (initDate, days) => {
+    const finalDate = parseInputDate(initDate);
+    finalDate.setDate(finalDate.getDate() + days);
+    let dayEndDate = finalDate.getDate();
+    let monthEndDate = finalDate.getMonth() + 1;
+    const yearEndDate = finalDate.getFullYear();
+    endDate = `${yearEndDate}-${monthEndDate}-${dayEndDate}`;
     return formatDate(finalDate);
-  }
+  };
 
-  const displayDateData=(initDate, durationDays)=>{
-    const getFinalDate=addDays(initDate, durationDays);
-    const pInitDate = document.querySelector('.initDate_data');
-    const pEndDate = document.querySelector('.endDate_data');
-    
-    const initialDate= parseInputDate(initDate);
-    const initialDateFormated = formatDate(initialDate);
-    pInitDate.innerHTML=`<strong class="desc_membership_data">Fecha Inicio:</strong>${initialDateFormated}`;
-    pEndDate.innerHTML=`<strong class="desc_membership_data">Fecha Fin:</strong>${getFinalDate}`;
-  }
-  
-  const displayMembershipData=()=>{
-    const optionSelected=selectMem.options[selectMem.selectedIndex];
-    const optionId=optionSelected.id;
+  const displayMembershipData = () => {
+    const optionSelected = selectMem.options[selectMem.selectedIndex];
+    const optionId = parseInt(optionSelected.id);
+
+    const membershipData = selectedMembershipData(optionId);
     const pPrice = document.querySelector(".price_data");
-    const pDuration = document.querySelector(".duration_data");    
-    const memberShiptTypeList = getMembershipTypeList();
-    const data = memberShiptTypeList.find(membership=>membership.id===parseInt(optionId));
-    pPrice.innerHTML = `<strong class="desc_membership_data">Precio:</strong>${data._price} bs`;
-    pDuration.innerHTML = `<strong class="desc_membership_data">Duracion:</strong>${data._duration} dias`;
-  }
+    const pDuration = document.querySelector(".duration_data");
+    const pInitDate = document.querySelector(".initDate_data");
+    const pEndDate = document.querySelector(".endDate_data");
 
+    const entryDate = selectClientEntry.value;
 
-  selectClientEntry.addEventListener('change',(e)=>{
-    e.preventDefault();
-    const optionSelected=selectMem.options[selectMem.selectedIndex];
-    const optionId=parseInt(optionSelected.id);
-    const membership=selectedMembershipData(optionId);
-    console.log(parseInt(membership._duration));
-    const entryDate=selectClientEntry.value;
+    const initialDate = parseInputDate(entryDate);
+    const initialDateFormated = formatDate(initialDate);
+    const duration = parseInt(membershipData._duration);
+    const getFinalDate = addDays(entryDate, duration);
+    pPrice.innerHTML = `<strong class="desc_membership_data">Precio:</strong>${membershipData._price} bs`;
+    pDuration.innerHTML = `<strong class="desc_membership_data">Duracion:</strong>${membershipData._duration} dias`;
+    pInitDate.innerHTML = `<strong class="desc_membership_data">Fecha Inicio:</strong>${initialDateFormated}`;
+    pEndDate.innerHTML = `<strong class="desc_membership_data">Fecha Fin:</strong>${getFinalDate}`;
+  };
+
+  const submitMembership = () => {
+    const alertDialog = document.getElementById("alert-dialog");
+    let checkForm = alertDialog.dataset.checkForm;
+
+    if (checkForm) {
+      let newMembership = new Membership();
+      newMembership._idClient = document.getElementById("client").value;
+      newMembership._idMembership =
+        document.getElementById("membershipType").value;
+      newMembership._initDate =
+        document.getElementById("dateClientEntry").value;
+      newMembership._endDate = endDate;
+      let membershipList =
+        JSON.parse(localStorage.getItem("membershipList")) || [];
+      membershipList.push(newMembership);
+      localStorage.setItem("membershipList", JSON.stringify(membershipList));
+      console.log("se registro con exito");
+      alertDialog.close();
+    }
+
+  };
+  const validateField = (field, id) => {
+    let isValid = false;
+    const inputError = document.getElementById(`${id}_error`);
+    let clearField = field.value.trim();
+
+    if (id && id === "client") {
+      if (clearField !== "client0") {
+        field.classList.add("valid");
+        field.classList.remove("error");
+        inputError.classList.remove("show");
+        isValid = true;
+      } else {
+        field.classList.add("error");
+        field.classList.remove("valid");
+        inputError.classList.add("show");
+        inputError.textContent = "Asigne un cliente";
+        isValid = false;
+      }
+    }
+    if (id && id === "membershipType") {
+      if (clearField !== "memType0") {
+        field.classList.add("valid");
+        field.classList.remove("error");
+        inputError.classList.remove("show");
+        isValid = true;
+      } else {
+        field.classList.add("error");
+        field.classList.remove("valid");
+        inputError.classList.add("show");
+        inputError.textContent = "Asigne una membresia";
+        isValid = false;
+      }
+    }
+    if (id && id === "dateClientEntry") {
+      if (clearField) {
+        field.classList.add("valid");
+        field.classList.remove("error");
+        inputError.classList.remove("show");
+        isValid = true;
+      } else {
+        field.classList.add("error");
+        field.classList.remove("valid");
+        inputError.classList.add("show");
+        inputError.textContent = "Asignar Fecha de inicio ";
+        isValid = false;
+      }
+    }
+    return isValid;
+  };
+  const submitChecked=()=>{
+    const alertDialog = document.getElementById("alert-dialog");
+    let checkForm = false;
+    let checks = [];
+    allInput.forEach((field) => {
+      const isValid = validateField(field, field.id);
+      if (!isValid) {
+        checks.push(false);
+      } else {
+        checks.push(true);
+      }
+    });
+    checkForm = checks.every((check) => check === true);
     
-    displayDateData(entryDate,parseInt(membership._duration));
-   
-  })
-  
-  selectMem.addEventListener("change", (e) => {
+    if (checkForm) {
+      alertDialog.dataset.checkForm = checkForm;
+      console.log(alertDialog.dataset.checkForm)
+      alertDialog.show();
+    }
+  }
+  selectClientEntry.addEventListener("change", (e) => {
     e.preventDefault();
+
     displayMembershipData();
   });
 
+  selectMem.addEventListener("change", (e) => {
+    e.preventDefault();
+  });
+
+  btnSubmit.addEventListener("click", () => {
+    submitChecked();
+    
+  });
+  newBtnSubmitModal.addEventListener("click", (e) => {
+    e.preventDefault();
+    submitMembership();
+  });
+  btnCancel.addEventListener("click", () => {
+    window.history.pushState({}, "", "/app");
+  
+  });
+  btnModalCancel.addEventListener("click", () => {
+    let alertDialog= document.getElementById('alert-dialog');
+    alertDialog.close();
+  
+  });
 
   validateDate();
   loadMembershipTypeList();
   loadClientList();
-  console.log(selectMem.firstChild)
 }
 initMembership();
