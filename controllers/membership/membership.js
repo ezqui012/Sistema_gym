@@ -6,12 +6,34 @@ export function initMembership() {
   const selectClientEntry = document.getElementById("dateClientEntry");
   const btnSubmit = document.querySelector(".btn_submit");
   const btnCancel = document.querySelector(".btn_cancel");
+  const toastContainer= document.querySelector('.toast_container');
   const btnModalSubmit = document.getElementById("modal_submit");
   const btnModalCancel = document.getElementById("close_modal");
   btnModalSubmit.replaceWith(btnModalSubmit.cloneNode(true));
   const newBtnSubmitModal = document.getElementById('modal_submit');
   
   let endDate = "";
+
+
+  const showToast=(checkform)=>{
+    let message='';
+    let option='';
+    if(checkform){
+      message='Se registro al usuario con éxito!!';
+      option='sucess';
+    }else{
+      message='Hubo un error al registrar, intenta de nuevo';
+      option='error';
+    }
+    let toastNotification=`<div class="toast ${option}">
+                           <p class="toast_message">${message}</p>
+                           </div>`
+    return toastNotification;
+  }
+  const removeToast=()=>{
+    toastContainer.removeChild(toastContainer.firstChild);
+  }
+
 
   function getClientList() {
     const clientList = JSON.parse(localStorage.getItem("usersList"));
@@ -163,7 +185,17 @@ export function initMembership() {
       localStorage.setItem("membershipList", JSON.stringify(membershipList));
       console.log("se registro con exito");
       alertDialog.close();
+      const toastNotification = showToast(checkForm);
+      toastContainer.innerHTML = toastNotification;
+      setTimeout(() => {
+        removeToast();
+      }, 3000);
+    } else {
+      const toastNotification = showToast(checkForm);
+      toastContainer.innerHTML = toastNotification;
+      console.log(showToast(checkForm));
     }
+    toastContainer.addEventListener("click", () => removeToast());
 
   };
   const validateField = (field, id) => {

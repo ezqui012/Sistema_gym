@@ -229,9 +229,7 @@ export function initRegisterEmployee() {
     }
     return isValid;
   };
-
-  btnSbumit.addEventListener("click", (e) => {
-    e.preventDefault();
+  const submitChecked=()=>{
     const alertDialog = document.getElementById("alert-dialog");
     let checkForm = false;
     let checks = [];
@@ -248,6 +246,10 @@ export function initRegisterEmployee() {
       alertDialog.dataset.checkForm = checkForm;
       alertDialog.show();
     }
+  }
+  btnSbumit.addEventListener("click", (e) => {
+    e.preventDefault();
+    submitChecked();
   });
   newBtnSubmitModal.addEventListener("click", (e) => {
     e.preventDefault();
