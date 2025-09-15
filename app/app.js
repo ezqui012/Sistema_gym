@@ -1,22 +1,20 @@
 import { sidebar } from "../components/sidebar.js";
 
+const sidebarComponent=sidebar();
+document.body.prepend(sidebarComponent);
 
-let sidebarComponent = document.getElementById("sidebar_component");
-
-addEventListener("DOMContentLoaded", () => {
-  renderComponent(sidebarComponent, sidebar());
-
-  const sideB = sidebarComponent.children[0];
-  const btns = sideB.querySelectorAll(".btn");
-  btns.forEach((sidebarBtn) => {
-    sidebarBtn.addEventListener("click", (e) => {
+const btns=document.querySelectorAll('.btn');
+btns.forEach((sidebarBtn)=>{    
+  
+  sidebarBtn.addEventListener('click', (e)=>{
       e.preventDefault();
       let route = sidebarBtn.dataset.route;
-      window.history.pushState({}, "", route);
-      loadComponent();
-    });
-  });
-});
+      if(route){
+        window.history.pushState({}, "", route);
+      loadComponent();  
+      }
+    })
+  })
 
 const routes = {
   404: "pages/404",
