@@ -1,4 +1,3 @@
-import { loadComponent } from "../../app/app.js";
 import { Membership } from "../../models/Membership.js";
 export function initMembership() {
   const allInput = document.querySelectorAll('.field_data')
