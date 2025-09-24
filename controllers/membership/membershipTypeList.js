@@ -8,7 +8,7 @@ export function initMembershipTypeList() {
 
   //variables to set page numbers
   let since = 0;
-  let limit = 10;
+  let limit = 11;
   let activePage = 1;
   let membershipTypes = getMembershipTypeList();
   
@@ -27,18 +27,19 @@ export function initMembershipTypeList() {
   };
 
   let deleteAction = () => {
-    const deleteClient = document.querySelectorAll(".delete_data");
-    deleteClient.forEach((btn) => {
+    const deleteMembershipTyp = document.querySelectorAll(".delete_data");
+    deleteMembershipTyp.forEach((btn) => {
       btn.addEventListener("click", (e) => {
         let id = e.currentTarget.dataset.index;
         deleteData(id);
+        loadList();
       });
     });
   };
 
   let deleteData = (id) => {
     if (id !== null) {
-      let membershipType = membershipTypes.filter((membershipType) => membershipType.id !== parseInt(id));
+      let membershipType = membershipTypes.filter((membershipTy) => membershipTy.id !== parseInt(id));
       localStorage.setItem("membershipTypeList", JSON.stringify(membershipType));
       loadList();
     } else {
@@ -144,7 +145,7 @@ export function initMembershipTypeList() {
   function changePageBack() {
     if (activePage > 1) {
       limit = since;
-      since = since - 10;
+      since = since - 11;
       activePage--;
       membershipTypes.slice(since, limit);
       loadList();
@@ -153,7 +154,7 @@ export function initMembershipTypeList() {
   function changePageForward() {
     if (activePage < pageNumber) {
       since = limit;
-      limit = limit + 10;
+      limit = limit + 11;
       activePage++;
       membershipTypes.slice(since, limit);
       loadList();
@@ -163,14 +164,14 @@ export function initMembershipTypeList() {
   function changePageNumber(page) {
     if (activePage < page) {
       activePage = page;
-      limit = 10 * page;
-      since = limit - 10;
+      limit = 11 * page;
+      since = limit - 11;
       membershipTypes.slice(since, limit);
       loadList();
     } else if (activePage > page) {
       let pageDifference = activePage - page;
-      since = since - pageDifference * 10;
-      limit = limit - pageDifference * 10;
+      since = since - pageDifference * 11;
+      limit = limit - pageDifference * 11;
       activePage = page;
       membershipTypes.slice(since, limit);
       loadList();

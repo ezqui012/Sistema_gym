@@ -56,6 +56,7 @@ export function initMembershipType() {
       alertDialog.showModal();
     }
   }
+
   const validateField = (field, id) => {
     let isValid = false;
     const inputError = document.getElementById(`${id}_error`);
@@ -147,7 +148,7 @@ export function initMembershipType() {
     }
     return isValid;
   };
-
+  
   const clearField=()=>{
     const allField = document.querySelectorAll(".field_data");
     allField.forEach(field=> field.value='');
