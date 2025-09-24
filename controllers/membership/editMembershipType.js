@@ -1,42 +1,92 @@
 import { loadComponent } from "../../app/app.js";
-import { MembershipType } from "../../models/MembershipType.js";
-//flag avoid double init
-export function initMembershipType() {
- 
-  const btnSubmit = document.querySelector(".btn_submit");
-  const btnCancelSubmit = document.querySelector(".btn_cancel");
-  const btnModalSubmit = document.getElementById("modal_submit");
-  const btnModalCancel = document.getElementById("close_modal");
+export function initEditMembershipType() {
+  const btnSubmit = document.querySelector('.btn_submit');  
+  const btnCancelSubmit =document.querySelector('.btn_cancel');
+  const btnModalSubmit = document.getElementById('modal_submit');
+  const btnModalCancel = document.getElementById('close_modal');
   const toastContainer = document.querySelector('.toast_container');
+
+  //cloned button to avoid membershipType registration twice.
   btnModalSubmit.replaceWith(btnModalSubmit.cloneNode(true));   
   const newBtnModalSubmit = document.getElementById('modal_submit');
   
-    function submitMembership(){
-    const alertDialog = document.getElementById("alert-dialog");
-    const checkDialog = alertDialog.dataset.checkForm;
-    if (checkDialog) {
-      const newMembershipType = new MembershipType();
-      newMembershipType.name = document.getElementById("name").value;
-      newMembershipType.price = document.getElementById("price").value;
-      newMembershipType.duration = document.getElementById("duration").value;
-      newMembershipType.description =
-        document.getElementById("description").value;
-      let membershipTypeList = JSON.parse(localStorage.getItem("membershipTypeList")) || [];
-      membershipTypeList.push(newMembershipType);
-      localStorage.setItem("membershipTypeList", JSON.stringify(membershipTypeList));
-      alertDialog.close();
-      const toastNotification = showToast(checkDialog);
-      toastContainer.innerHTML = toastNotification;
-      clearField();
-      setTimeout(() => {
-        removeToast();
-      }, 3000);
-    } else {
-      const toastNotification = showToast(checkDialog);
-      toastContainer.innerHTML = toastNotification;
-    }
-    toastContainer.addEventListener("click", () => removeToast());
+  const urlParams = new URLSearchParams(window.location.search);
+  const membershipTypeId = parseInt(urlParams.get("id"));
+  
+  
+  let nameField = document.getElementById('name');
+  let priceField = document.getElementById('price');
+  let durationField = document.getElementById('duration');
+  let descriptionField = document.getElementById('description');
+  
+  //get the membership Type List from local storage
+  const getMembershipTypeData = () => {
+    const membershipTypeList = JSON.parse(
+      localStorage.getItem("membershipTypeList") || []);
+    return membershipTypeList;
+  };
+
+  //get the membership type data from the given id
+  const findMembershipType=()=>{
+    const membershipList=getMembershipTypeData()
+    const membershipTypeData = membershipList.find(
+      (memType) => memType.id === membershipTypeId
+    );
+  
+    return membershipTypeData;
   }
+
+  
+  
+
+
+  //load membership type data on the fields
+  const loadFieldData=()=>{
+    const membershipTypeData=findMembershipType();
+    nameField.value=membershipTypeData._membershipName;
+    priceField.value=membershipTypeData._price;
+    durationField.value=membershipTypeData._duration;
+    descriptionField.value=membershipTypeData._description;
+  }
+
+
+  //update the membership type data in the local storage 
+  function updateMembershipData(){
+   let membershipTypeList=getMembershipTypeData();
+      
+    //let prueba = JSON.parse(localStorage.getItem('membershipTypeList')||[]);
+    for (let i = 0; i < membershipTypeList.length; i++) {
+      if(membershipTypeId===membershipTypeList[i].id){
+        const alertDialog = document.getElementById("alert-dialog");
+      let checkForm = alertDialog.dataset.checkForm;
+      if (checkForm) {
+        const toastNotification = showToast(checkForm);
+        toastContainer.innerHTML = toastNotification;
+        membershipTypeList[i]._membershipName = document.getElementById("name").value;
+        membershipTypeList[i]._price = document.getElementById("price").value;
+        membershipTypeList[i]._duration = document.getElementById("duration").value;
+        membershipTypeList[i]._description = document.getElementById("description").value;
+    
+        localStorage.setItem("membershipTypeList", JSON.stringify(membershipTypeList));
+        alertDialog.close();
+          setTimeout(() => {
+            removeToast();
+          }, 3000);
+          break;
+      } else {
+          const toastNotification = showToast(checkForm);
+          toastContainer.insertAdjacentHTML = toastNotification;
+          console.log(showToast(checkForm));
+          break;
+        }
+       }
+      
+    }
+    
+  }
+  
+
+  //validate all fields before an update
   function sendMembership() {
     const allField = document.querySelectorAll(".field_data");
     const alertDialog = document.getElementById("alert-dialog");
@@ -148,16 +198,15 @@ export function initMembershipType() {
     }
     return isValid;
   };
+
+  loadFieldData();
   
-  const clearField=()=>{
-    const allField = document.querySelectorAll(".field_data");
-    allField.forEach(field=> field.value='');
-  }
+  
   const showToast=(checkform)=>{
     let message='';
     let option='';
     if(checkform){
-      message='Se registro al usuario con éxito!!';
+      message='Se guardaron los cambios con éxito!!';
       option='sucess';
     }else{
       message='Hubo un error al registrar, intenta de nuevo';
@@ -182,7 +231,7 @@ export function initMembershipType() {
   });
   newBtnModalSubmit.addEventListener("click", (e) => {
     e.preventDefault();
-    submitMembership();      
+    updateMembershipData();      
   });
     
   
@@ -191,6 +240,4 @@ export function initMembershipType() {
   });
 }
 
-
-
-  initMembershipType();
+initEditMembershipType();

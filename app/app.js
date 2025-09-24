@@ -27,7 +27,10 @@ const routes = {
   "/editClient": "../views/clients/editClient.html",
   "/editEmployee": "../views/employee/editEmployee.html",
   "/membership": "../views/membership/membership.html",
-  "/membershipType": "../views/membership/membershipType.html"
+  "/membershipType": "../views/membership/membershipType.html",
+  "/editMembershipType": "../views/membership/editMembershipType.html",
+  "/membershipTypeList": "../views/membership/membershipTypeList.html",
+
 };
 
 const loadComponent = async () => {
@@ -86,6 +89,12 @@ function initView(path) {
       break;
     case "/membershipType":
       import("/controllers/membership/membershipType.js").then((mod) => mod.initMembershipType()).catch((err)=>console.log(err));
+      break;
+    case "/editMembershipType":
+      import("/controllers/membership/editMembershipType.js").then((mod) => mod.initEditMembershipType()).catch((err)=>console.log(err));
+      break;
+    case "/membershipTypeList":
+      import("/controllers/membership/membershipTypeList.js").then((mod) => mod.initMembershipTypeList()).catch((err)=>console.log(err));
       break;  
   }
 

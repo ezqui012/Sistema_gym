@@ -65,7 +65,7 @@ img{
     height: 10px;
     
 }
-.add_client, .add_employee{
+.add_client, .add_employee, .add_membershipType{
     color: #fff;
     background-color: #12122099 ;
     border: none;
@@ -75,6 +75,9 @@ img{
     &:hover{
         background-color: #2C2C2C;
     }
+}
+.add_membershipType{
+    width: 150px;
 }
 .list{
     background-color: #2C2C2C;

@@ -7,6 +7,13 @@ export class MembershipType{
         this._duration=duration;
         this._price=price;
     }
+
+    update({ membershipName, description, duration, price}) {
+        if(membershipName) this._membershipName = membershipName;
+        if(description) this._description = description;
+        if(duration) this._duration = duration;
+        if(price) this._price = price;
+    }
     set name(value){
         this._membershipName=value;
     }
