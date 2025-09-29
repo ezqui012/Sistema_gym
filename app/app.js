@@ -27,6 +27,8 @@ const routes = {
   "/editClient": "../views/clients/editClient.html",
   "/editEmployee": "../views/employee/editEmployee.html",
   "/membership": "../views/membership/membership.html",
+  "/membershipList": "../views/membership/membershipList.html",
+  "/editMembership": "../views/membership/editMembership.html",
   "/membershipType": "../views/membership/membershipType.html",
   "/editMembershipType": "../views/membership/editMembershipType.html",
   "/membershipTypeList": "../views/membership/membershipTypeList.html",
@@ -87,6 +89,12 @@ function initView(path) {
     case "/membership":
       import("/controllers/membership/membership.js").then((mod) => mod.initMembership()).catch((err)=>console.log(err));
       break;
+    case "/editMembership":
+      import("/controllers/membership/editMembership.js").then((mod) => mod.initEditMembershipType()).catch((err)=>console.log(err));
+      break;  
+    case "/membershipList":
+      import("/controllers/membership/membershipList.js").then((mod) => mod.initMembershipList()).catch((err)=>console.log(err));
+      break;  
     case "/membershipType":
       import("/controllers/membership/membershipType.js").then((mod) => mod.initMembershipType()).catch((err)=>console.log(err));
       break;

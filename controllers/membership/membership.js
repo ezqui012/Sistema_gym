@@ -173,7 +173,7 @@ export function initMembership() {
     if (checkForm) {
       let newMembership = new Membership();
       newMembership._idClient = document.getElementById("client").value;
-      newMembership._idMembership =
+      newMembership._idMembershipType =
         document.getElementById("membershipType").value;
       newMembership._initDate =
         document.getElementById("dateClientEntry").value;
@@ -182,7 +182,6 @@ export function initMembership() {
         JSON.parse(localStorage.getItem("membershipList")) || [];
       membershipList.push(newMembership);
       localStorage.setItem("membershipList", JSON.stringify(membershipList));
-      console.log("se registro con exito");
       alertDialog.close();
       const toastNotification = showToast(checkForm);
       toastContainer.innerHTML = toastNotification;
@@ -192,7 +191,7 @@ export function initMembership() {
     } else {
       const toastNotification = showToast(checkForm);
       toastContainer.innerHTML = toastNotification;
-      console.log(showToast(checkForm));
+      
     }
     toastContainer.addEventListener("click", () => removeToast());
 
