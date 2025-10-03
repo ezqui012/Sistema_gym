@@ -90,7 +90,7 @@ function initView(path) {
       import("/controllers/membership/membership.js").then((mod) => mod.initMembership()).catch((err)=>console.log(err));
       break;
     case "/editMembership":
-      import("/controllers/membership/editMembership.js").then((mod) => mod.initEditMembershipType()).catch((err)=>console.log(err));
+      import("/controllers/membership/editMembership.js").then((mod) => mod.initEditMembership()).catch((err)=>console.log(err));
       break;  
     case "/membershipList":
       import("/controllers/membership/membershipList.js").then((mod) => mod.initMembershipList()).catch((err)=>console.log(err));
