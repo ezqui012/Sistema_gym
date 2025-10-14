@@ -57,6 +57,18 @@ export function initMembershipList(){
         return membershipList;
     }
 
+    function getMembershipTypeList(){
+      const membershipTypeList = JSON.parse(localStorage.getItem('membershipTypeList'))||[];
+      return membershipTypeList;
+    }
+
+    const getAMembershipType=(id)=>{
+      const membershipTypeList=getMembershipTypeList();
+      let membershipTypeData=membershipTypeList.find(membershipType=>membershipType.id===id);
+      return membershipTypeData;
+    } 
+
+
     const displayButtonOption = (id) => {
     let buttons = `<button class='btn_action view_data' data-index='${id}'><i class="fas fa-eye ver-btn" title="Ver"></i></button>
                  <button class='btn_action edit_data' data-index='${id}'><i class="fas fa-pen editar-btn" title="Editar"></i></button>
@@ -81,7 +93,8 @@ export function initMembershipList(){
 
       const tdMembership = document.createElement("td");
       tdMembership.classList.add("data-table");
-      tdMembership.innerHTML = membershipList[i]._idMembershipType;
+      const idMembershipType = membershipList[i]._idMembershipType;
+      tdMembership.innerHTML = getAMembershipType(idMembershipType)._membershipName;
       trContainer.appendChild(tdMembership);
 
       const tdInitDate = document.createElement("td");

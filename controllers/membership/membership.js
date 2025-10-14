@@ -76,11 +76,7 @@ export function initMembership() {
     for (let i = 0; i < membershipTypeList.length; i++) {
       const newOption = document.createElement("option");
       newOption.classList.add("opt-memberType");
-      newOption.setAttribute("id", membershipTypeList[i].id);
-      newOption.setAttribute(
-        "value",
-        `${membershipTypeList[i]._membershipName}`
-      );
+      newOption.value= membershipTypeList[i].id;
       newOption.text = `${membershipTypeList[i]._membershipName}`;
       selectMembershipType.appendChild(newOption);
     }
@@ -131,6 +127,7 @@ export function initMembership() {
     if (month < 10) {
       month = "0" + month;
     }
+    
     return (formatedDate = `${day}/${month}/${year}`);
   };
 
@@ -145,10 +142,9 @@ export function initMembership() {
   };
 
   const displayMembershipData = () => {
-    const optionSelected = selectMem.options[selectMem.selectedIndex];
-    const optionId = parseInt(optionSelected.id);
-
-    const membershipData = selectedMembershipData(optionId);
+    const optionSelected = parseInt(selectMem.value);
+    const membershipData = selectedMembershipData(optionSelected);
+    console.log(membershipData)
     const pPrice = document.querySelector(".price_data");
     const pDuration = document.querySelector(".duration_data");
     const pInitDate = document.querySelector(".initDate_data");
@@ -160,10 +156,10 @@ export function initMembership() {
     const initialDateFormated = formatDate(initialDate);
     const duration = parseInt(membershipData._duration);
     const getFinalDate = addDays(entryDate, duration);
-    pPrice.innerHTML = `<strong class="desc_membership_data">Precio:</strong>${membershipData._price} bs`;
-    pDuration.innerHTML = `<strong class="desc_membership_data">Duracion:</strong>${membershipData._duration} dias`;
-    pInitDate.innerHTML = `<strong class="desc_membership_data">Fecha Inicio:</strong>${initialDateFormated}`;
-    pEndDate.innerHTML = `<strong class="desc_membership_data">Fecha Fin:</strong>${getFinalDate}`;
+     pPrice.innerHTML = `<strong class="desc_membership_data">Precio:</strong>${membershipData._price} bs`;
+     pDuration.innerHTML = `<strong class="desc_membership_data">Duracion:</strong>${membershipData._duration} dias`;
+     pInitDate.innerHTML = `<strong class="desc_membership_data">Fecha Inicio:</strong>${initialDateFormated}`;
+     pEndDate.innerHTML = `<strong class="desc_membership_data">Fecha Fin:</strong>${getFinalDate}`;
   };
 
   const submitMembership = () => {
@@ -173,10 +169,8 @@ export function initMembership() {
     if (checkForm) {
       let newMembership = new Membership();
       newMembership._idClient = document.getElementById("client").value;
-      newMembership._idMembershipType =
-        document.getElementById("membershipType").value;
-      newMembership._initDate =
-        document.getElementById("dateClientEntry").value;
+      newMembership._idMembershipType =parseInt(document.getElementById("membershipType").value);
+      newMembership._initDate =document.getElementById("dateClientEntry").value;
       newMembership._endDate = endDate;
       let membershipList =
         JSON.parse(localStorage.getItem("membershipList")) || [];
