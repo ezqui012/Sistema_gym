@@ -137,6 +137,12 @@ export function initMembership() {
     let dayEndDate = finalDate.getDate();
     let monthEndDate = finalDate.getMonth() + 1;
     const yearEndDate = finalDate.getFullYear();
+    if(dayEndDate<10){
+      dayEndDate='0'+dayEndDate;
+    }
+    if(monthEndDate<10){
+      monthEndDate='0'+monthEndDate;
+    }
     endDate = `${yearEndDate}-${monthEndDate}-${dayEndDate}`;
     return formatDate(finalDate);
   };
@@ -172,8 +178,7 @@ export function initMembership() {
       newMembership._idMembershipType =parseInt(document.getElementById("membershipType").value);
       newMembership._initDate =document.getElementById("dateClientEntry").value;
       newMembership._endDate = endDate;
-      let membershipList =
-        JSON.parse(localStorage.getItem("membershipList")) || [];
+      let membershipList = JSON.parse(localStorage.getItem("membershipList")) || [];
       membershipList.push(newMembership);
       localStorage.setItem("membershipList", JSON.stringify(membershipList));
       alertDialog.close();

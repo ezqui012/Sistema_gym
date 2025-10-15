@@ -89,11 +89,11 @@ export function initEditMembership() {
     const selectMembershipType = document.getElementById("membershipType");
     const membershipTypeList =JSON.parse(localStorage.getItem("membershipTypeList")) || [];
     const membershipTypeId = getMembershipData();
+    selectMembershipType.innerHTML='';
     for (let i = 0; i < membershipTypeList.length; i++) {
       const membershipTypOpt = document.createElement("OPTION");
       membershipTypOpt.classList.add("opt-memberType");
-      membershipTypOpt.setAttribute("id", membershipTypeList[i].id);
-      membershipTypOpt.setAttribute("value",membershipTypeList[i]._membershipName);
+      membershipTypOpt.value=membershipTypeList[i].id;
       membershipTypOpt.innerHTML = membershipTypeList[i]._membershipName;
       if (membershipTypeId._idMembershipType === membershipTypeList[i].id) {
             membershipTypOpt.selected = true;
@@ -147,8 +147,12 @@ export function initEditMembership() {
     return (formatedDate = `${day}/${month}/${year}`);
   };
   const formatOutputDate=(date)=>{
-    
+    const [year, month, day]=date.split('-');
+    const formatedDate=`${day}-${month}-${year}`;
+
+    return formatedDate;
   }
+
   const addDays = (initDate, days) => {
     const finalDate = parseInputDate(initDate);
     finalDate.setDate(finalDate.getDate() + days);
@@ -163,44 +167,67 @@ export function initEditMembership() {
     const sectionData=document.querySelector('.section_data_container');
     const membshipData=getMembershipData();
     const selectedMembershipTypeData=selectedMembershipData(membshipData._idMembershipType);
-    if(sectionData){
-      
+    if(sectionData){      
       let price=document.querySelector('.price_data');
       let duration=document.querySelector('.duration_data');
       let initDate=document.querySelector('.initDate_data');
       let endDate=document.querySelector('.endDate_data');
+
       price.innerHTML=`<strong class="desc_membership_data">Precio:</strong>${selectedMembershipTypeData._price}bs`;
       duration.innerHTML=`<strong class="desc_membership_data">Duracion:</strong>${selectedMembershipTypeData._duration} dias`;
-      initDate.innerHTML=`<strong class="desc_membership_data">Fecha Inicio:</strong>${membshipData._initDate}`;
-      endDate.innerHTML=`<strong class="desc_membership_data">Fecha Fin:</strong>${membshipData._endDate}`;
+      initDate.innerHTML=`<strong class="desc_membership_data">Fecha Inicio:</strong>${formatOutputDate(membshipData._initDate)}`;
+      endDate.innerHTML=`<strong class="desc_membership_data">Fecha Fin:</strong>${formatOutputDate(membshipData._endDate)}`;
     }
-  }
+  }                                 
+  const displayMembershipData = () => {
+    const optionSelected = parseInt(selectMem.value);
+    const membershipData = selectedMembershipData(optionSelected);
+    const pPrice = document.querySelector(".price_data");
+    const pDuration = document.querySelector(".duration_data");
+    const pInitDate = document.querySelector(".initDate_data");
+    const pEndDate = document.querySelector(".endDate_data");
 
-  const submitMembership = () => {
-    const alertDialog = document.getElementById("alert-dialog");
-    let checkForm = alertDialog.dataset.checkForm;
+    const entryDate = selectClientEntry.value;
 
-    if (checkForm) {
-      let newMembership = new Membership();
-      newMembership._idClient = document.getElementById("client").value;
-      newMembership._idMembershipType =
-        document.getElementById("membershipType").value;
-      newMembership._initDate =
-        document.getElementById("dateClientEntry").value;
-      newMembership._endDate = endDate;
-      let membershipList =
-        JSON.parse(localStorage.getItem("membershipList")) || [];
-      membershipList.push(newMembership);
-      localStorage.setItem("membershipList", JSON.stringify(membershipList));
-      alertDialog.close();
-      const toastNotification = showToast(checkForm);
-      toastContainer.innerHTML = toastNotification;
-      setTimeout(() => {
-        removeToast();
-      }, 3000);
-    } else {
-      const toastNotification = showToast(checkForm);
-      toastContainer.innerHTML = toastNotification;
+    const initialDate = parseInputDate(entryDate);
+    const initialDateFormated = formatDate(initialDate);
+    const duration = parseInt(membershipData._duration);
+    const getFinalDate = addDays(entryDate, duration);
+     pPrice.innerHTML = `<strong class="desc_membership_data">Precio:</strong>${membershipData._price} bs`;
+     pDuration.innerHTML = `<strong class="desc_membership_data">Duracion:</strong>${membershipData._duration} dias`;
+     pInitDate.innerHTML = `<strong class="desc_membership_data">Fecha Inicio:</strong>${initialDateFormated}`;
+     pEndDate.innerHTML = `<strong class="desc_membership_data">Fecha Fin:</strong>${getFinalDate}`;
+  };
+
+  const updateMembership = () => {
+    let membershipList=JSON.parse(localStorage.getItem('membershipList'))||[];
+    
+    for (let i = 0; i < membershipList.length; i++) {
+      if(membershipId===membershipList[i]._idMembership){
+        const alertDialog = document.getElementById("alert-dialog");
+        let checkForm = alertDialog.dataset.checkForm;
+        if (checkForm) {
+        const toastNotification = showToast(checkForm);
+        toastContainer.innerHTML = toastNotification;
+        membershipList[i]._idClient = document.getElementById("client").value;
+        membershipList[i]._idMembershipType = parseInt(document.getElementById("membershipType").value);
+        membershipList[i]._initDate = document.getElementById("dateClientEntry").value;
+        membershipList[i]._endDate = endDate;
+    
+        localStorage.setItem("membershipList", JSON.stringify(membershipList));
+        alertDialog.close();
+          setTimeout(() => {
+            removeToast();
+          }, 3000);
+          break;
+      } else {
+          const toastNotification = showToast(checkForm);
+          toastContainer.insertAdjacentHTML = toastNotification;
+          console.log(showToast(checkForm));
+          break;
+        }
+      }
+      
     }
     toastContainer.addEventListener("click", () => removeToast());
   };
@@ -277,7 +304,7 @@ export function initEditMembership() {
   selectClientEntry.addEventListener("change", (e) => {
     e.preventDefault();
 
-    //displayMembershipData();
+    displayMembershipData();
   });
 
   selectMem.addEventListener("change", (e) => {
@@ -289,7 +316,7 @@ export function initEditMembership() {
   });
   newBtnSubmitModal.addEventListener("click", (e) => {
     e.preventDefault();
-    submitMembership();
+    updateMembership();
   });
   btnCancel.addEventListener("click", () => {
     window.history.pushState({}, "", "/app");
