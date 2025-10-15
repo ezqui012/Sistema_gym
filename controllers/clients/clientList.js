@@ -18,7 +18,7 @@ export function initClientList() {
 
     tbodyContainer.innerHTML = "";
 
-    for (let i = since; i < limit && i < users.length; i++) {
+    for (let i = since; i < since + limit && i < users.length; i++) {
       let trContainer = document.createElement("tr");
       trContainer.classList.add("data-row");
       let tdName = document.createElement("td");

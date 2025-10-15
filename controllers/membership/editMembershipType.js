@@ -28,7 +28,7 @@ export function initEditMembershipType() {
 
   //get the membership type data from the given id
   const findMembershipType=()=>{
-    const membershipList=getMembershipTypeData()
+    const membershipList=getMembershipTypeData();
     const membershipTypeData = membershipList.find(
       (memType) => memType.id === membershipTypeId
     );

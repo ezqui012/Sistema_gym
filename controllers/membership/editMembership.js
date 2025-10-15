@@ -1,19 +1,20 @@
-import { Membership } from "../../models/Membership.js";
-export function initMembership() {
-  const allInput = document.querySelectorAll('.field_data')
+export function initEditMembership() {
   const selectMem = document.getElementById("membershipType");
   const selectClientEntry = document.getElementById("dateClientEntry");
   const btnSubmit = document.querySelector(".btn_submit");
   const btnCancel = document.querySelector(".btn_cancel");
-  const toastContainer= document.querySelector('.toast_container');
+  const toastContainer = document.querySelector(".toast_container");
   const btnModalSubmit = document.getElementById("modal_submit");
   const btnModalCancel = document.getElementById("close_modal");
   btnModalSubmit.replaceWith(btnModalSubmit.cloneNode(true));
-  const newBtnSubmitModal = document.getElementById('modal_submit');
-  
+  const newBtnSubmitModal = document.getElementById("modal_submit");
+
   let endDate = "";
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const membershipId = parseInt(urlParams.get("id"));
 
+    
   const showToast=(checkform)=>{
     let message='';
     let option='';
@@ -33,12 +34,18 @@ export function initMembership() {
     toastContainer.removeChild(toastContainer.firstChild);
   }
 
-
-  function getClientList() {
-    const clientList = JSON.parse(localStorage.getItem("usersList"));
+  
+  const getClientList = () => {
+    const clientList = JSON.parse(localStorage.getItem("usersList")) || [];
     return clientList;
-  }
+  };
 
+  const getMembershipData = () => {
+    const membershipList =
+      JSON.parse(localStorage.getItem("membershipList")) || [];
+    const membershipData = membershipList.find((membership) => membership._idMembership === membershipId);
+    return membershipData;
+  };
   function getMembershipTypeList() {
     const membershiptTypeList = JSON.parse(
       localStorage.getItem("membershipTypeList")
@@ -46,52 +53,61 @@ export function initMembership() {
     return membershiptTypeList;
   }
 
-  function loadClientList() {
-    const selectClient = document.getElementById("client");
-    selectClient.innerHTML = "";
-    const firstOpt = document.createElement("OPTION");
-    firstOpt.classList.add("opt-client");
-    firstOpt.setAttribute("value", "client0");
-    firstOpt.textContent = "Asignar cliente";
-    selectClient.append(firstOpt);
-    const clients = getClientList();
-    for (let i = 0; i < clients.length; i++) {
-      const newOption = document.createElement("option");
-      newOption.classList.add("opt-client");
-      newOption.value = clients[i].id;
-      newOption.text = `${clients[i].name} ${clients[i].lastName}`;
-      selectClient.append(newOption);
-    }
-  }
 
-  function loadMembershipTypeList() {
-    const selectMembershipType = document.getElementById("membershipType");
-    selectMembershipType.innerHTML = "";
-    const firstOpt = document.createElement("OPTION");
-    firstOpt.classList.add("opt-memberType");
-    firstOpt.setAttribute("value", "memType0");
-    firstOpt.textContent = "Asignar Tipo de Membresia";
-    selectMembershipType.append(firstOpt);
-    const membershipTypeList = getMembershipTypeList();
-    for (let i = 0; i < membershipTypeList.length; i++) {
-      const newOption = document.createElement("option");
-      newOption.classList.add("opt-memberType");
-      newOption.value= membershipTypeList[i].id;
-      newOption.text = `${membershipTypeList[i]._membershipName}`;
-      selectMembershipType.appendChild(newOption);
+
+  const loadClientList = () => {
+    const clients = getClientList();
+    const clientIdMembership = parseInt(getMembershipData()._idClient);
+    const clientSelect = document.getElementById("client");
+    clientSelect.innerHTML = "";
+    for (let i = 0; i < clients.length; i++) {
+      const clientOpt = document.createElement("OPTION");
+      clientOpt.textContent = `${clients[i].name} ${clients[i].lastName}`;
+      clientOpt.classList.add("opt-client");
+      clientOpt.value=clients[i].id;
+      if (clientIdMembership === parseInt(clientOpt.value)) {
+        clientOpt.selected = true;
+        clientSelect.append(clientOpt);
+      } else {
+        clientSelect.append(clientOpt);
+      }
     }
-  }
+  };
+
 
   const selectedMembershipData = (id) => {
     const membershipList = getMembershipTypeList();
     let membershipSelected = null;
     if (membershipList) {
-      membershipSelected = membershipList.find(
-        (memebership) => memebership.id === id
+        membershipSelected = membershipList.find((membership) => membership.id === id
       );
     }
 
     return membershipSelected;
+  }
+  const loadMembershipTypeList = () => {
+    const selectMembershipType = document.getElementById("membershipType");
+    const membershipTypeList =JSON.parse(localStorage.getItem("membershipTypeList")) || [];
+    const membershipTypeId = getMembershipData();
+    selectMembershipType.innerHTML='';
+    for (let i = 0; i < membershipTypeList.length; i++) {
+      const membershipTypOpt = document.createElement("OPTION");
+      membershipTypOpt.classList.add("opt-memberType");
+      membershipTypOpt.value=membershipTypeList[i].id;
+      membershipTypOpt.innerHTML = membershipTypeList[i]._membershipName;
+      if (membershipTypeId._idMembershipType === membershipTypeList[i].id) {
+            membershipTypOpt.selected = true;
+            selectMembershipType.append(membershipTypOpt);
+      } else {
+        selectMembershipType.append(membershipTypOpt);
+      }
+    }
+  };
+
+  const loadMembershipDate = () => {
+    const membershipData = getMembershipData();
+    const initDate = document.getElementById("dateClientEntry");
+    initDate.value = membershipData._initDate;
   };
 
   const validateDate = () => {
@@ -127,9 +143,15 @@ export function initMembership() {
     if (month < 10) {
       month = "0" + month;
     }
-    
+
     return (formatedDate = `${day}/${month}/${year}`);
   };
+  const formatOutputDate=(date)=>{
+    const [year, month, day]=date.split('-');
+    const formatedDate=`${day}-${month}-${year}`;
+
+    return formatedDate;
+  }
 
   const addDays = (initDate, days) => {
     const finalDate = parseInputDate(initDate);
@@ -137,20 +159,29 @@ export function initMembership() {
     let dayEndDate = finalDate.getDate();
     let monthEndDate = finalDate.getMonth() + 1;
     const yearEndDate = finalDate.getFullYear();
-    if(dayEndDate<10){
-      dayEndDate='0'+dayEndDate;
-    }
-    if(monthEndDate<10){
-      monthEndDate='0'+monthEndDate;
-    }
     endDate = `${yearEndDate}-${monthEndDate}-${dayEndDate}`;
     return formatDate(finalDate);
   };
 
+  const loadSectionData=()=>{
+    const sectionData=document.querySelector('.section_data_container');
+    const membshipData=getMembershipData();
+    const selectedMembershipTypeData=selectedMembershipData(membshipData._idMembershipType);
+    if(sectionData){      
+      let price=document.querySelector('.price_data');
+      let duration=document.querySelector('.duration_data');
+      let initDate=document.querySelector('.initDate_data');
+      let endDate=document.querySelector('.endDate_data');
+
+      price.innerHTML=`<strong class="desc_membership_data">Precio:</strong>${selectedMembershipTypeData._price}bs`;
+      duration.innerHTML=`<strong class="desc_membership_data">Duracion:</strong>${selectedMembershipTypeData._duration} dias`;
+      initDate.innerHTML=`<strong class="desc_membership_data">Fecha Inicio:</strong>${formatOutputDate(membshipData._initDate)}`;
+      endDate.innerHTML=`<strong class="desc_membership_data">Fecha Fin:</strong>${formatOutputDate(membshipData._endDate)}`;
+    }
+  }                                 
   const displayMembershipData = () => {
     const optionSelected = parseInt(selectMem.value);
     const membershipData = selectedMembershipData(optionSelected);
-    console.log(membershipData)
     const pPrice = document.querySelector(".price_data");
     const pDuration = document.querySelector(".duration_data");
     const pInitDate = document.querySelector(".initDate_data");
@@ -168,32 +199,37 @@ export function initMembership() {
      pEndDate.innerHTML = `<strong class="desc_membership_data">Fecha Fin:</strong>${getFinalDate}`;
   };
 
-  const submitMembership = () => {
-    const alertDialog = document.getElementById("alert-dialog");
-    let checkForm = alertDialog.dataset.checkForm;
-
-    if (checkForm) {
-      let newMembership = new Membership();
-      newMembership._idClient = document.getElementById("client").value;
-      newMembership._idMembershipType =parseInt(document.getElementById("membershipType").value);
-      newMembership._initDate =document.getElementById("dateClientEntry").value;
-      newMembership._endDate = endDate;
-      let membershipList = JSON.parse(localStorage.getItem("membershipList")) || [];
-      membershipList.push(newMembership);
-      localStorage.setItem("membershipList", JSON.stringify(membershipList));
-      alertDialog.close();
-      const toastNotification = showToast(checkForm);
-      toastContainer.innerHTML = toastNotification;
-      setTimeout(() => {
-        removeToast();
-      }, 3000);
-    } else {
-      const toastNotification = showToast(checkForm);
-      toastContainer.innerHTML = toastNotification;
+  const updateMembership = () => {
+    let membershipList=JSON.parse(localStorage.getItem('membershipList'))||[];
+    
+    for (let i = 0; i < membershipList.length; i++) {
+      if(membershipId===membershipList[i]._idMembership){
+        const alertDialog = document.getElementById("alert-dialog");
+        let checkForm = alertDialog.dataset.checkForm;
+        if (checkForm) {
+        const toastNotification = showToast(checkForm);
+        toastContainer.innerHTML = toastNotification;
+        membershipList[i]._idClient = document.getElementById("client").value;
+        membershipList[i]._idMembershipType = parseInt(document.getElementById("membershipType").value);
+        membershipList[i]._initDate = document.getElementById("dateClientEntry").value;
+        membershipList[i]._endDate = endDate;
+    
+        localStorage.setItem("membershipList", JSON.stringify(membershipList));
+        alertDialog.close();
+          setTimeout(() => {
+            removeToast();
+          }, 3000);
+          break;
+      } else {
+          const toastNotification = showToast(checkForm);
+          toastContainer.insertAdjacentHTML = toastNotification;
+          console.log(showToast(checkForm));
+          break;
+        }
+      }
       
     }
     toastContainer.addEventListener("click", () => removeToast());
-
   };
   const validateField = (field, id) => {
     let isValid = false;
@@ -244,7 +280,8 @@ export function initMembership() {
     }
     return isValid;
   };
-  const submitChecked=()=>{
+  const submitChecked = () => {
+    const allInput = document.querySelectorAll(".field_data");
     const alertDialog = document.getElementById("alert-dialog");
     let checkForm = false;
     let checks = [];
@@ -257,13 +294,13 @@ export function initMembership() {
       }
     });
     checkForm = checks.every((check) => check === true);
-    
+
     if (checkForm) {
       alertDialog.dataset.checkForm = checkForm;
-      console.log(alertDialog.dataset.checkForm)
+      console.log(alertDialog.dataset.checkForm);
       alertDialog.show();
     }
-  }
+  };
   selectClientEntry.addEventListener("change", (e) => {
     e.preventDefault();
 
@@ -276,24 +313,25 @@ export function initMembership() {
 
   btnSubmit.addEventListener("click", () => {
     submitChecked();
-    
   });
   newBtnSubmitModal.addEventListener("click", (e) => {
     e.preventDefault();
-    submitMembership();
+    updateMembership();
   });
   btnCancel.addEventListener("click", () => {
     window.history.pushState({}, "", "/app");
-  
   });
   btnModalCancel.addEventListener("click", () => {
-    let alertDialog= document.getElementById('alert-dialog');
+    let alertDialog = document.getElementById("alert-dialog");
     alertDialog.close();
-  
   });
-
+  //checkFilledFields();
+  
   validateDate();
-  loadMembershipTypeList();
+  loadMembershipDate();
   loadClientList();
+  loadMembershipTypeList();
+  loadSectionData();
 }
-initMembership();
+
+initEditMembership();

@@ -41,7 +41,6 @@ export function initRegisterClient() {
   btnSubmit.addEventListener("click",(e)=>{
     e.preventDefault();
     const alertDialog= document.getElementById('alert-dialog');
-    console.log("llega");
     let checkForm=true;
     let checks=[];
     allInput.forEach((oneInput)=>{
@@ -80,7 +79,7 @@ export function initRegisterClient() {
       let usersList= JSON.parse(localStorage.getItem("usersList")) || [];
       usersList.push(newClient);
       localStorage.setItem("usersList", JSON.stringify(usersList));
-      console.log("Usuario registrado con exito");
+
       alertDialog.close();
       const toastNotification=showToast(checkForm);
       toastContainer.innerHTML=toastNotification;
@@ -90,7 +89,6 @@ export function initRegisterClient() {
     }else {
       const toastNotification=showToast(checkForm);
        toastContainer.innerHTML=toastNotification;
-      console.log(showToast(checkForm))
     };
     toastContainer.addEventListener("click",()=>removeToast());
   }

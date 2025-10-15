@@ -7,6 +7,7 @@ export function sidebar() {
             <button class="btn btn_main"><b>Membresias</b></button>
             <div class="btn_section">
                 <button data-route="/membership" class="btn sub_btn"><b>Membresía</b></button>
+                <button data-route="/membershipList" class="btn sub_btn"><b>Lista de Membresias</b></button>
                 <button data-route="/membershipType" class="btn sub_btn"><b>Tipo de Membresía</b></button>
                 <button data-route="/membershipTypeList" class="btn sub_btn"><b>Lista de Tipos de Membresia</b></button>
             </div>
